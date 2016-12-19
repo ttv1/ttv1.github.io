@@ -18,7 +18,7 @@ gawk '            { sub(".py","")}
                        print $1,a[x]}'  |
 gawk '     { needs[$1][$2] == 1} 
        END { for (x in needs) {
-                printf(" [ \"%s.py\" -nt \"%s.html\" ] && pycco %s.py\n",x,x,x)
+                printf(" [ \"%s.py\" -nt \"%s.html\" ] && pycco -d . %s.py\n",x,x,x)
                 printf("zip -qu '$Z'/%s.zip %s.html pycco.css",x,x)
                 depends(x)
                 print "\ngit add * '$Z'/*\n"
