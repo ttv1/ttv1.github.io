@@ -32,9 +32,11 @@ function depends(x,seen) {
 }}
 ' > $Z/zips.sh
 
+(echo ""
 for i in *.html; do
     echo "- [$i]($i)"
-done > index.md
+done
+echo "") > index.md
 
 git add index.md
 
