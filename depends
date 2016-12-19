@@ -26,7 +26,7 @@ gawk '     { needs[$1][$2] == 1}
 function depends(x,seen) {
   if (x in needs) 
     if (++seen[x] == 1) {
-       printf(" %s.py $s.html",x)
+       printf(" %s.py %s.html",x,x)
        for(y in needs[x]) 
            depends(y,seen)
 }}
