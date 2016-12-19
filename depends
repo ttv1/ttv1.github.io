@@ -34,9 +34,9 @@ function depends(x,seen) {
 
 for i in *.html; do
     echo "- [$i]($i)"
-done > README.md
+done > index.md
 
-git add README.md
+git add index.md
 
 bash $Z/zips.sh
 git commit -am "saving";
