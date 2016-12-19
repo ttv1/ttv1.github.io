@@ -5,7 +5,6 @@
 - [csv.html](csv.html)
 - [eg.html](eg.html)
 - [egeg.html](egeg.html)
-- [index.html](index.html)
 - [num.html](num.html)
 - [numbers.html](numbers.html)
 - [numeg.html](numeg.html)
