@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>thing.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>thing.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>Maintains summaries of numbers or symbols:</p>
+<ul>
+<li>
+<p>In use, values are just thrown at a <code>thing</code> and, internally, this code works
+  out if we are talking about <code>num</code>s or <code>sym</code>s.</p>
+<ul>
+<li>Internally, <code>thing</code>s have a variable <code>thing.my</code>s containing either a <code>num</code> or a <code>sym</code>.</li>
+</ul>
+</li>
+<li>
+<p>Apart from sumamries, <code>thing</code>s also keep a random <code>sample</code> of the values seen
+  so far.</p>
+<ul>
+<li>This variable is kept in <code>thing.samples</code>.</li>
+</ul>
+</li>
+</ul>
+<h3>Usage</h3>
+<p>Can be used incrementally, or in batch.</p>
+<h4>Example of incremental usage:</h4>
+<pre><code>   t=thing()
+   for i in range(1000):#
+     t + i
+     if i % 100 == 0: print(t,t.samples.stats())
+
+    # output:
+    {:txt 0 :pos 0 :n 1} (0, 0)
+    {:txt 0 :pos 0 :n 101} (50, 50)
+    {:txt 0 :pos 0 :n 201} (100, 100)
+    {:txt 0 :pos 0 :n 301} (149.5, 154)
+    {:txt 0 :pos 0 :n 401} (197.5, 205)
+    {:txt 0 :pos 0 :n 501} (251.5, 249)
+    {:txt 0 :pos 0 :n 601} (311.0, 287)
+    {:txt 0 :pos 0 :n 701} (353.5, 362)
+    {:txt 0 :pos 0 :n 801} (413.5, 415)
+    {:txt 0 :pos 0 :n 901} (462.5, 450)
+    {:txt 0 :pos 0 :n 901} (480.5, 443)
+</code></pre>
+<h4>Example of batch usage:</h4>
+<pre><code>    t= thing(i for i in range(901))
+    print(t,t.samples.stats())
+
+    # output
+    {:txt 0 :pos 0 :n 69}
+</code></pre>
+<hr />
+<h2>Programmer's Guide</h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">num</span>     <span class="kn">import</span> <span class="n">num</span>
+<span class="kn">from</span> <span class="nn">sym</span>     <span class="kn">import</span> <span class="n">sym</span>
+<span class="kn">from</span> <span class="nn">sample</span>  <span class="kn">import</span> <span class="n">sample</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">thing</span><span class="p">:</span>
+  <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s">&quot;?&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>Initialization</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">inits</span><span class="o">=</span><span class="p">[],</span><span class="n">pos</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">samples</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="ow">or</span> <span class="mi">0</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">txt</span> <span class="ow">or</span> <span class="n">pos</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">txt</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">pos</span><span class="o">=</span><span class="n">pos</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">=</span><span class="bp">None</span> <span class="c"># will contain a `num` or a `sym`, depending on what data arrives</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">=</span><span class="bp">None</span>
+    <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inits</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>Pretty print</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">&#39;{:txt </span><span class="si">%s</span><span class="s"> :pos </span><span class="si">%s</span><span class="s"> :n </span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">n</span><span class="p">())</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Updating. If this our first item, then work out the type
+and initialize the internal summary variable.
+Also, ensure we have a pace to store the random <code>samples</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">xs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> 
+        <span class="n">what</span> <span class="o">=</span> <span class="n">num</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,(</span><span class="nb">float</span><span class="p">,</span><span class="nb">int</span><span class="p">))</span> <span class="k">else</span> <span class="n">sym</span>
+        <span class="n">i</span><span class="o">.</span><span class="n">my</span>  <span class="o">=</span> <span class="n">what</span><span class="p">()</span>
+      <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">i</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="n">sample</span><span class="p">()</span>   
+      <span class="n">i</span><span class="o">.</span><span class="n">my</span> <span class="o">+</span> <span class="n">x</span>
+      <span class="n">i</span><span class="o">.</span><span class="n">samples</span> <span class="o">+</span> <span class="n">x</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Iterating over items. If passed a list then yield each item.
+Otherwise, just yield the passed in argument.
+But do not yield anything that is an <code>UNKNOWN</code> value.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">xs</span><span class="p">):</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="n">xs</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">xs</span><span class="p">,(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">))</span> <span class="k">else</span> <span class="p">[</span><span class="n">xs</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">thing</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">x</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <hr />
+<h3>Deferred services</h3>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Much of <code>thing</code>'s services are defined in terms of the nested
+internal summary variables.
+For example, here's how we compute 
+the number of items seen by this <code>thing</code>. </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">n</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">n</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">cliffsDelta</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">):</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">cliffsDelta</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">ranges</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>       <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">ranges</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">bootstrap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">same_CD</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>    <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">cliffsDelta</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>  <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">(</span><span class="n">j</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>Parametric. assumes gaussians</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">same_HT</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>    <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">hedges</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">ttest</span><span class="p">(</span><span class="n">j</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">ttest</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>      <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">ttest</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">my</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">hedges</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>     <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">hedges</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">my</span><span class="p">)</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

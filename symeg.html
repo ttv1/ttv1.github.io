@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>symeg.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>symeg.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p><img 
+src="https://avatars0.githubusercontent.com/u/23156192?v=3&s=200"
+align=right 
+width=70>
+<em>Just another <a href="http://ttv1.github.com">Timm Tool</a>.</em>
+<br clear=all></p>
+<hr />
+<p>from  eg  import eg
+import re</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">words</span><span class="o">=</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">You can do anything, but not everything.</span>
+<span class="s">—David Allen</span>
+
+<span class="s">Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away.</span>
+<span class="s">—Antoine de Saint-Exupéry</span>
+
+<span class="s">The richest man is not he who has the most, but he who needs the least.</span>
+<span class="s">—Unknown Author</span>
+
+<span class="s">You miss 100 percent of the shots you never take.</span>
+<span class="s">—Wayne Gretzky</span>
+
+<span class="s">Courage is not the absence of fear, but rather the judgement that something else is more important than fear.</span>
+<span class="s">—Ambrose Redmoon</span>
+
+<span class="s">You must be the change you wish to see in the world.</span>
+<span class="s">—Gandhi</span>
+
+<span class="s">When hungry, eat your rice; when tired, close your eyes. Fools may laugh at me, but wise men will know what I mean.</span>
+<span class="s">—Lin-Chi</span>
+
+<span class="s">The third-rate mind is only happy when it is thinking with the majority. The second-rate mind is only happy when it is thinking with the minority. The first-rate mind is only happy when it is thinking.</span>
+<span class="s">—A. A. Milne</span>
+
+<span class="s">To the man who only has a hammer, everything he encounters begins to look like a nail.</span>
+<span class="s">—Abraham Maslow</span>
+
+<span class="s">We are what we repeatedly do; excellence, then, is not an act but a habit.</span>
+<span class="s">—Aristotle</span>
+<span class="s">&quot;&quot;&quot;</span>
+
+<span class="n">words</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">r&#39;[-—,\.\n]&#39;</span><span class="p">,</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="n">words</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">words</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <hr />
+<h2>Copyleft</h2>
+<p><img align=right 
+src="https://s-media-cache-ak0.pinimg.com/236x/9f/6d/3f/9f6d3f9e606fc448b5f781391e4cb3c3.jpg" 
+width=170>
+Copyright © 2016 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a></p>
+<p>This program is free software. It comes without any warranty, to
+the extent permitted by applicable law. You can redistribute it
+and/or modify it under the terms of the Do What The F*ck You Want
+To Public License, Version 2, as published by Sam Hocevar. See
+<a href="http://www.wtfpl.net">http://www.wtfpl.net</a> for more details.</p>
+<p>Share and enjoy.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@eg</span>
+<span class="k">def</span> <span class="nf">_sym1</span><span class="p">():</span>
+  <span class="n">s</span><span class="o">=</span><span class="n">sym</span><span class="p">()</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">+</span> <span class="n">x</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">25</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+  <span class="k">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="nd">@eg</span>
+<span class="k">def</span> <span class="nf">_sym2</span><span class="p">():</span>
+  <span class="k">print</span><span class="p">(</span> <span class="n">sym</span><span class="p">(</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">words</span> <span class="p">))</span>
+    
+  
+<span class="n">eg</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
