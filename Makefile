@@ -1,13 +1,15 @@
-all : files commit
+all : minus plus commit
 
-files:
+minus:
 		-@ git  rm _* 2> /dev/null
 		-@ rm -f _*
 		-@ git  rm [a-z]* 2> /dev/null
 		-@ rm -f [a-z]*
-	  cp -r ../src/docs/* .
-		rm *.py
-		git add *
+
+plus:
+	  - cp -r ../src/docs/* .
+		-rm *.py
+		-git add *
 		
 
 depends :
