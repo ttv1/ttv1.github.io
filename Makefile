@@ -1,4 +1,4 @@
-all : minus plus commit
+all : minus plus typo
 
 minus:
 		-@ git  rm _* 2> /dev/null
