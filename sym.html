@@ -4,12 +4,14 @@
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
   <title>sym.py</title>
   <link rel="stylesheet" href="pycco.css">
+	<link rel="shortcut icon" href="favicon.png" type="image/png">
 </head>
 <body>
 <div id='container'>
+<a href="https://github.com/ttv1/src/blob/master/sym.py"><img style="z-index: 10; position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a> 
   <div id="background"></div>
   <div class='section'>
-    <div class='docs'><h1>sym.py</h1></div>
+    <div class='docs'><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sym.py</h1></div>
   </div>
   <div class='clearall'>
   <div class='section' id='section-0'>
@@ -18,16 +20,17 @@
         <a class='octothorpe' href='#section-0'>#</a>
       </div>
       <p><img 
-src="https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png"
-align=middle
+src="https://avatars0.githubusercontent.com/u/23156192?v=3&s=200"
+align=left
 width=120>
-<em>Just another <a href="http://ttv1.github.com">Timm Tool</a>.</em>
+&nbsp;<br>&nbsp;<br>
+<em>Just another <a href="http://ttv1.github.io">Timm Tool</a>.<br> Discuss this file <a href="https://github.com/ttv1/src/issues">on Github</a>. <img  align=middle src="https://github.com/favicon.ico"></em>
 <br clear=all></p>
 <hr />
 <p>Maintains summaries of symbols. Can be used incrementally, or in batch.</p>
 <p>Example of incremental usage:</p>
 <pre><code>   words = # some long list of quotes
-   words = re.sub(r'[-—,\.\n]'," ",words).split()
+   words = re.sub(r'[-,\.\n]'," ",words).split()
 
    s=sym()
    for i,x in enumerate(words):
@@ -36,21 +39,21 @@ width=120>
    print(s)
 
    # output:
-   {:n 1 :most You :mode 1 :ent 0}
-   {:n 26 :most is :mode 3 :ent 4.1329}
-   {:n 51 :most is :mode 4 :ent 5.0546}
-   {:n 76 :most is :mode 5 :ent 5.495}
-   {:n 101 :most the :mode 7 :ent 5.8595}
-   {:n 126 :most the :mode 7 :ent 6.2548}
-   {:n 151 :most is :mode 10 :ent 6.2816}
-   {:n 176 :most is :mode 12 :ent 6.3449}
-   {:n 199 :most is :mode 13 :ent 6.5374}
+   {:n   1 :most  1 :mode You :ent 0}
+   {:n  26 :most  3 :mode is  :ent 4.1329}
+   {:n  51 :most  4 :mode is  :ent 5.0546}
+   {:n  76 :most  5 :mode is  :ent 5.495}
+   {:n 101 :most  7 :mode the :ent 5.8595}
+   {:n 126 :most  7 :mode the :ent 6.2548}
+   {:n 151 :most 10 :mode is  :ent 6.2816}
+   {:n 176 :most 12 :mode is  :ent 6.3449}
+   {:n 199 :most 13 :mode is  :ent 6.5374}
 </code></pre>
 <p>Example of batch usage:</p>
 <pre><code>  print( sym( x for x in words ))
 
   # output:
-  {:n 199 :most is :mode 13 :ent 6.5374}
+  {:n 199 :most 13 :mode is :ent 6.5374}
 </code></pre>
 <p>Also, can be used to:</p>
 <ul>
@@ -100,7 +103,7 @@ width=120>
     </div>
     <div class='code'>
       <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&#39;{:n </span><span class="si">%s</span><span class="s"> :most </span><span class="si">%s</span><span class="s"> :mode </span><span class="si">%s</span><span class="s"> :ent </span><span class="si">%.5g</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">n</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">most</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">ent</span><span class="p">())</span></pre></div>
+    <span class="k">return</span> <span class="s">&#39;{:n </span><span class="si">%s</span><span class="s"> :most </span><span class="si">%s</span><span class="s"> :mode </span><span class="si">%s</span><span class="s"> :ent </span><span class="si">%.5g</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">n</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">most</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">ent</span><span class="p">())</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -116,7 +119,8 @@ width=120>
     <span class="n">i</span><span class="o">.</span><span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">count</span><span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">counts</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">most</span><span class="p">:</span>
-      <span class="n">i</span><span class="o">.</span><span class="n">most</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">count</span><span class="p">,</span><span class="n">x</span></pre></div>
+      <span class="n">i</span><span class="o">.</span><span class="n">most</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">mode</span><span class="o">=</span><span class="n">count</span><span class="p">,</span><span class="n">x</span>
+    <span class="k">return</span> <span class="n">x</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -188,11 +192,11 @@ From Section 3 of <a href="http://i.giwebb.com/wp-content/papercite-data/pdf/Yan
         <a class='octothorpe' href='#section-9'>#</a>
       </div>
       <hr />
-<h2>Copyleft</h2>
 <p><img align=right 
-src="https://s-media-cache-ak0.pinimg.com/236x/9f/6d/3f/9f6d3f9e606fc448b5f781391e4cb3c3.jpg" 
-width=170>
-Copyright © 2016 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a></p>
+src="https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png"
+width=170></p>
+<h2>Copyleft</h2>
+<p>Copyright &copy; 2016 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a></p>
 <p>This program is free software. It comes without any warranty, to
 the extent permitted by applicable law. You can redistribute it
 and/or modify it under the terms of the Do What The F*ck You Want

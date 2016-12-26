@@ -4,12 +4,14 @@
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
   <title>csveg.py</title>
   <link rel="stylesheet" href="pycco.css">
+	<link rel="shortcut icon" href="favicon.png" type="image/png">
 </head>
 <body>
 <div id='container'>
+<a href="https://github.com/ttv1/src/blob/master/csveg.py"><img style="z-index: 10; position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a> 
   <div id="background"></div>
   <div class='section'>
-    <div class='docs'><h1>csveg.py</h1></div>
+    <div class='docs'><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;csveg.py</h1></div>
   </div>
   <div class='clearall'>
   <div class='section' id='section-0'>
@@ -19,48 +21,62 @@
       </div>
       <p><img 
 src="https://avatars0.githubusercontent.com/u/23156192?v=3&s=200"
-align=right 
-width=70>
-<em>Just another <a href="http://ttv1.github.com">Timm Tool</a>.</em>
+align=left
+width=120>
+&nbsp;<br>&nbsp;<br>
+<em>Just another <a href="http://ttv1.github.io">Timm Tool</a>.<br> Discuss this file <a href="https://github.com/ttv1/src/issues">on Github</a>. <img  align=middle src="https://github.com/favicon.ico"></em>
 <br clear=all></p>
 <hr />
 <p>from csv import csv
 from eg  import eg</p>
-<p>print("Demo of read from string...")</p>
-<p>stringOfData="""a,b,
-c,d
-1,2.0,3,x</p>
+<p>@eg
+def _csvFromString():
+  "demo of read from string..."
+  stringOfData="""a,b,
+  c,d
+  1,2.0,3,x</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">y</span><span class="s">&quot;&quot;&quot;</span>
-
-<span class="s">for row in csv(stringOfData, header=True):</span>
-<span class="s">  print(row)</span>
-
-<span class="s">  if os.path.isfile(&quot;data/weather.csv&quot;) and </span><span class="se">\</span>
-<span class="s">   os.path.isfile(&quot;data/weatherLarge.csv&quot;) and</span><span class="se">\</span>
-<span class="s">   os.path.isfile(&quot;data/data.zip&quot;):</span>
-<span class="s">  print(&quot;</span><span class="se">\n</span><span class="s">Demo of read from file...&quot;)</span>
+      <div class="highlight"><pre>   <span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="n">y</span><span class="s">&quot;&quot;&quot;</span>
+<span class="s">   for row in csv(stringOfData, header=True):</span>
+<span class="s">      print(row)</span>
+<span class="s">   print(row)</span>
+<span class="s">   assert row == [10, 20.0, 30, &#39;y&#39;]</span>
+<span class="s">#DIVIDER</span>
+<span class="s">@eg</span>
+<span class="s">def _csvFromSimpleFile():</span>
+<span class="s">  &quot;Reading a few Ascii rows.&quot;</span>
 <span class="s">  for row in csv(file=&quot;data/weather.csv&quot;):</span>
 <span class="s">    print(row)</span>
-<span class="s">  m,t1=1,time.process_time()</span>
-<span class="s">  print(&quot;</span><span class="se">\n</span><span class="s">Plz wait 10 seconds while I read 100MB+ of data...&quot;)</span>
-<span class="s">  print(&quot;Demo of reading from file...&quot;)</span>
-<span class="s">  for row1 in csv(file=&quot;data/weatherLarge.csv&quot;):</span>
-<span class="s">    m += 1</span>
-<span class="s">  n,t2=1,time.process_time()</span>
-<span class="s">  print(&quot;... more reading of big files ...</span><span class="se">\n</span><span class="s">&quot;)</span>
-<span class="s">  print(&quot;Demo of reading from zip...&quot;)</span>
-<span class="s">  for row2 in csv(file=&quot;weatherLarge.csv&quot;,</span>
-<span class="s">                    zip=&quot;data/data.zip&quot;):</span>
-<span class="s">    n += 1</span>
-<span class="s">  t3=time.process_time()</span>
-<span class="s">  print(m,t2-t1,row1) # reading from raw ascii</span>
-<span class="s">  print(n,t3-t2,row2) # reading from zip is slightly faster </span>
-<span class="s">  </span>
+<span class="s">  assert row == [&#39;rainy&#39;, 71.0, 91, &#39;TRUE&#39;, &#39;no&#39;]</span>
+
+<span class="s">@eg</span>
+<span class="s">def _csvFromLargeFile(n=0):</span>
+<span class="s">    &quot;Reading nearly 2M rows from file.&quot;</span>
+<span class="s">    print(&quot;</span><span class="se">\n</span><span class="s">Plz wait 10 seconds while I read 100MB+ of data...&quot;)</span>
+<span class="s">    for row in csv(file=&quot;data/weatherLarge.csv&quot;):</span>
+<span class="s">      n +=1 </span>
+<span class="s">    assert row == [&#39;rainy&#39;, 71.0, 91, &#39;TRUE&#39;, &#39;no&#39;]</span>
+<span class="s">    assert n == 1835009</span>
+
+<span class="s">@eg</span>
+<span class="s">def _csvFromZip(n=0):</span>
+<span class="s">    &quot;Reading nearly 2M rows from zip.&quot;</span>
+<span class="s">    for row in csv(file=&quot;weatherLarge.csv&quot;,</span>
+<span class="s">                      zip=&quot;data/data.zip&quot;):</span>
+<span class="s">      n += 1</span>
+<span class="s">    assert row == [&#39;rainy&#39;, 71.0, 91, &#39;TRUE&#39;, &#39;no&#39;]</span>
+<span class="s">    assert n == 1835009</span>
+<span class="s">    </span>
+<span class="s">if __name__ == &quot;__main__&quot;: eg()</span>
 
 <span class="s">&quot;&quot;&quot;</span>
-<span class="n">____</span></pre></div>
+<span class="n">____</span>
+
+
+<span class="o">&lt;</span><span class="n">img</span> <span class="n">align</span><span class="o">=</span><span class="n">right</span> 
+<span class="n">src</span><span class="o">=</span><span class="s">&quot;https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png&quot;</span>
+<span class="n">width</span><span class="o">=</span><span class="mi">170</span><span class="o">&gt;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -69,13 +85,10 @@ c,d
       <div class='octowrap'>
         <a class='octothorpe' href='#section-1'>#</a>
       </div>
-      <h1>Copyleft</h1>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="o">&lt;</span><span class="n">img</span> <span class="n">align</span><span class="o">=</span><span class="n">right</span> 
-<span class="n">src</span><span class="o">=</span><span class="s">&quot;https://s-media-cache-ak0.pinimg.com/236x/9f/6d/3f/9f6d3f9e606fc448b5f781391e4cb3c3.jpg&quot;</span> 
-<span class="n">width</span><span class="o">=</span><span class="mi">170</span><span class="o">&gt;</span>
-<span class="n">Copyright</span> <span class="err">©</span> <span class="mi">2016</span> <span class="n">Tim</span> <span class="n">Menzies</span> <span class="o">&lt;</span><span class="n">tim</span><span class="nd">@menzies.us</span><span class="o">&gt;</span>
+      <div class="highlight"><pre><span class="n">Copyright</span> <span class="o">&amp;</span><span class="n">copy</span><span class="p">;</span> <span class="mi">2016</span> <span class="n">Tim</span> <span class="n">Menzies</span> <span class="o">&lt;</span><span class="n">tim</span><span class="nd">@menzies.us</span><span class="o">&gt;</span>
 
 <span class="n">This</span> <span class="n">program</span> <span class="ow">is</span> <span class="n">free</span> <span class="n">software</span><span class="o">.</span> <span class="n">It</span> <span class="n">comes</span> <span class="n">without</span> <span class="nb">any</span> <span class="n">warranty</span><span class="p">,</span> <span class="n">to</span>
 <span class="n">the</span> <span class="n">extent</span> <span class="n">permitted</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">redistribute</span> <span class="n">it</span>
@@ -91,6 +104,18 @@ c,d
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copyleft</h1>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
       </div>
       
     </div>

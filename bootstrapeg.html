@@ -2,16 +2,16 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <title>numeg.py</title>
+  <title>bootstrapeg.py</title>
   <link rel="stylesheet" href="pycco.css">
 	<link rel="shortcut icon" href="favicon.png" type="image/png">
 </head>
 <body>
 <div id='container'>
-<a href="https://github.com/ttv1/src/blob/master/numeg.py"><img style="z-index: 10; position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a> 
+<a href="https://github.com/ttv1/src/blob/master/bootstrapeg.py"><img style="z-index: 10; position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a> 
   <div id="background"></div>
   <div class='section'>
-    <div class='docs'><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;numeg.py</h1></div>
+    <div class='docs'><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bootstrapeg.py</h1></div>
   </div>
   <div class='clearall'>
   <div class='section' id='section-0'>
@@ -27,28 +27,46 @@ width=120>
 <em>Just another <a href="http://ttv1.github.io">Timm Tool</a>.<br> Discuss this file <a href="https://github.com/ttv1/src/issues">on Github</a>. <img  align=middle src="https://github.com/favicon.ico"></em>
 <br clear=all></p>
 <hr />
-<p>from eg import eg
-from random import random as r</p>
+<p>from random    import random as r
+from bootstrap import bootstrap as bst
+from time      import process_time as now
+import random</p>
+<p>def base0(n):
+ return [r() for _ in range(n)]</p>
 <p>@eg
-def _num1():
-  n=num()
-  for i in range(1000):
-    n + i
-    if i % 100 == 0: print(n)
-  assert n.n == 1000</p>
+def _b0(n=30,div=100, boo=bst,same=None,f=base0):
+ print(boo.<strong>name</strong>)
+ base = f(n)
+ same0 = None
+ t0 = None
+ other=None
+ for conf in [90,95,99]:
+   print("")
+   for b in [32,64,128,256,512,1024]:
+     report=[]
+     t=0
+     for n in range(0,10,2):
+       other   = [x+ (r()*n/div) for x in base]
+       t1      = now()
+       same    = boo(base, other,b=b,conf=conf)
+       same0   = same if same0 == None else same0
+       t2      = now()
+       t      += t2 - t1
+       report += ["=" if same else "."]
+     t0 = t if t0 == None else t0
+     print(''.join(report),dict(conf=conf,b=b,time=round(t/t0,2)))
+ print("list first:",[round(x,2) for x in sorted(base)[::2]])
+ print("list  last:",[round(x,2) for x in sorted(other)[::2]])
+ assert same0,"first must be the same"
+ assert not same,"last should be different"</p>
 <p>@eg
-def _num2():
- n = num(i for i in range(901))
- print(n)
- assert n.n == 901</p>
-<p>@eg
-def _num3():
- x = num()
- for _ in range(10**5):
-   x + r()
- x=num([96, 104, 126, 134, 140])
- assert round(x.sd(),3) == 19.131
- assert x.n == 5</p>
+def _b1():
+ for k in [0.5,1,2,4]:
+   print("")
+   print(dict(shape=k))
+   f = lambda n: [random.weibullvariate(1,k)
+                  for _ in range(n)]
+   _b0(f=f)</p>
 <p>if <strong>name</strong> == "<strong>main</strong>": eg()</p>
     </div>
     <div class='code'>

@@ -4,12 +4,14 @@
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
   <title>rangeseg.py</title>
   <link rel="stylesheet" href="pycco.css">
+	<link rel="shortcut icon" href="favicon.png" type="image/png">
 </head>
 <body>
 <div id='container'>
+<a href="https://github.com/ttv1/src/blob/master/rangeseg.py"><img style="z-index: 10; position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a> 
   <div id="background"></div>
   <div class='section'>
-    <div class='docs'><h1>rangeseg.py</h1></div>
+    <div class='docs'><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rangeseg.py</h1></div>
   </div>
   <div class='clearall'>
   <div class='section' id='section-0'>
@@ -19,32 +21,53 @@
       </div>
       <p><img 
 src="https://avatars0.githubusercontent.com/u/23156192?v=3&s=200"
-align=right 
-width=70>
-<em>Just another <a href="http://ttv1.github.com">Timm Tool</a>.</em>
+align=left
+width=120>
+&nbsp;<br>&nbsp;<br>
+<em>Just another <a href="http://ttv1.github.io">Timm Tool</a>.<br> Discuss this file <a href="https://github.com/ttv1/src/issues">on Github</a>. <img  align=middle src="https://github.com/favicon.ico"></em>
 <br clear=all></p>
 <hr />
 <p>from random import random as r
 from random import seed
 from eg import eg</p>
 <p>@eg
-def _symnum():
- seed(1)
- lst=[10,11,12,13,14,15,16,17,18,19,20,
-      21,22,23,24,25,26,27,28,29,30,31,32,33,34]
- x = num(lst)
- assert round(x.mu,3)==22.000
- assert round(x.sd,3)==7.360
- assert x.median() == 22
- assert x.lo == 10
- assert x.hi == 34
- y = sym(["a"]<em>9)
- for z in ["b"]</em>5: y + z
- assert round(y.ent(),3) == 0.940
- z = num([1,2])
- assert z.median() == 1.5
- z = num([1,2,3,4])
- assert z.median() == 2.5</p>
+def _div0a():
+ for rng in div([ 10,11,13,14,15,15,16,16,17,
+                  20,21,23,24,25,25,26,26,27,
+                  30,31,33,34,35,35,36,36,37 ]):
+   print("range", rng["id"],":",
+                  dict(lo= rng["x"].lo,
+                       hi= rng["x"].hi))</p>
+<p>@eg
+def _div0b():
+ a,b  = "a","b"
+ for rng in ediv([ (10,a),(11,a),(13,a),(14,a),(15,a),
+                  (20,b),(21,b),(23,b),(24,b),(25,b),
+                  (30,b),(31,b),(33,b),(34,b),(35,b) ]):
+   print("range",rng["id"],":",
+                 dict(lo= rng["x"].lo,
+                      hi= rng["x"].hi))</p>
+<p>@eg
+def _div0c():
+ for rng in sdiv([ (0.7,2),(0.75,2),(0.8,2),(0,85,2),(0.9,2),(0.8,2),(1,2),
+                   (1.05,2),(1,2),(0.7,2),(0.75,2),(0.8,2),(0.85,2),(0.9,2),
+                   (10,14),(10.5,13.5),(11,13),(11.5,13),(12,12.5),(12.5,12),
+                   (13,11.5),(13.5,10.5),(14,10),(14.5,9.5),(15,9),(15.5,8.5)
+                 ]):
+   print("range",rng["id"],":",
+                 dict(lo= rng["x"].lo,
+                      hi= rng["x"].hi))</p>
+<p>@eg
+def _div0d():
+ for rng in ddiv(dict(x1=[0.34, 0.49, 0.51, 0.6],
+                      x2=[0.6,  0.7,  0.8,  0.9],
+                      x3=[0.15, 0.25, 0.4,  0.35],
+                      x4=[0.6,  0.7,  0.8,  0.9],
+                      x5=[0.1,  0.2,  0.3,  0.4])):  <br />
+   print("range",rng["id"],":",
+         [x[0].label for x in rng["has"]],
+         dict(lo= rng["x"].lo,
+              hi= rng["x"].hi))</p>
 <p>@eg
 def _div1(n=10000):
  "1D cluster. Noise. Should divide evenly."
@@ -132,10 +155,15 @@ def _ddiv6():
    print("start  %.4f stop %.4f n %.4f" % (xx.lo, xx.hi, xx.n),end=" ")
    print("median %.4f mode %.4f has %s" % (xx.median(), yy.median(), len(zz["has"])),end= " ")
    print("has %s" % [s[0].label for s in zz["has"]])</p>
-<p>eg()</p>
+<p>if <strong>name</strong> == "<strong>main</strong>": eg()</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="n">____</span></pre></div>
+      <div class="highlight"><pre><span class="n">____</span>
+
+
+<span class="o">&lt;</span><span class="n">img</span> <span class="n">align</span><span class="o">=</span><span class="n">right</span> 
+<span class="n">src</span><span class="o">=</span><span class="s">&quot;https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png&quot;</span>
+<span class="n">width</span><span class="o">=</span><span class="mi">170</span><span class="o">&gt;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -144,13 +172,10 @@ def _ddiv6():
       <div class='octowrap'>
         <a class='octothorpe' href='#section-1'>#</a>
       </div>
-      <h1>Copyleft</h1>
+      <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copyleft</h1>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="o">&lt;</span><span class="n">img</span> <span class="n">align</span><span class="o">=</span><span class="n">right</span> 
-<span class="n">src</span><span class="o">=</span><span class="s">&quot;https://s-media-cache-ak0.pinimg.com/236x/9f/6d/3f/9f6d3f9e606fc448b5f781391e4cb3c3.jpg&quot;</span> 
-<span class="n">width</span><span class="o">=</span><span class="mi">170</span><span class="o">&gt;</span>
-<span class="n">Copyright</span> <span class="err">©</span> <span class="mi">2016</span> <span class="n">Tim</span> <span class="n">Menzies</span> <span class="o">&lt;</span><span class="n">tim</span><span class="nd">@menzies.us</span><span class="o">&gt;</span>
+      <div class="highlight"><pre><span class="n">Copyright</span> <span class="o">&amp;</span><span class="n">copy</span><span class="p">;</span> <span class="mi">2016</span> <span class="n">Tim</span> <span class="n">Menzies</span> <span class="o">&lt;</span><span class="n">tim</span><span class="nd">@menzies.us</span><span class="o">&gt;</span>
 
 <span class="n">This</span> <span class="n">program</span> <span class="ow">is</span> <span class="n">free</span> <span class="n">software</span><span class="o">.</span> <span class="n">It</span> <span class="n">comes</span> <span class="n">without</span> <span class="nb">any</span> <span class="n">warranty</span><span class="p">,</span> <span class="n">to</span>
 <span class="n">the</span> <span class="n">extent</span> <span class="n">permitted</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">redistribute</span> <span class="n">it</span>
