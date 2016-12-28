@@ -124,7 +124,7 @@ are used as the working memory for this test engine:
         <a class='octothorpe' href='#section-3'>#</a>
       </div>
       <p>Run one function <code>f</code>, print any output, plus its
-runtime and the functions's name. and doc string (if it exists).
+runtime and the functions's name and doc string (if it exists).
 Called by <code>runall</code>.</p>
     </div>
     <div class='code'>
@@ -155,7 +155,7 @@ Called by <code>runall</code>.</p>
       <span class="k">print</span><span class="p">(</span><span class="s">&quot;# No known examples.&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
       <span class="n">PASS</span><span class="o">=</span><span class="n">FAIL</span><span class="o">=</span><span class="mi">0</span>
-      <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="c">#- Always set the random seed before starting a demo.</span>
+      <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="c"># Reset the random seed before starting a demo.</span>
       <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
           <span class="k">continue</span>
@@ -296,7 +296,7 @@ it runs just the functions <code>f1,f2,etc</code> from the list of known functio
     <div class='code'>
       <div class="highlight"><pre>  <span class="k">else</span> <span class="p">:</span> 
       <span class="n">runall</span><span class="p">(</span> <span class="n">lst</span> <span class="p">)</span>
-  <span class="k">return</span> <span class="n">f</span></pre></div>
+  <span class="k">return</span> <span class="n">f</span> <span class="c"># `eg` might be a decorator. So return function `f`.</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
