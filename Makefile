@@ -1,10 +1,10 @@
 all : minus plus typo
 
 minus:
-	-@ git  rm _* 2> /dev/null
-	-@ rm -f _*
+	-@ git  rm _*     2> /dev/null
+	-@ rm -f _*       2> /dev/null
 	-@ git  rm [a-z]* 2> /dev/null
-	-@ rm -f [a-z]*
+	-@ rm -f [a-z]*   2> /dev/null
 
 plus:
 	- cp -r ../src/docs/* .
