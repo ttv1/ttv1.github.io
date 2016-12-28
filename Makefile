@@ -1,20 +1,19 @@
 all : minus plus typo
 
 minus:
-		-@ git  rm _* 2> /dev/null
-		-@ rm -f _*
-		-@ git  rm [a-z]* 2> /dev/null
-		-@ rm -f [a-z]*
+	-@ git  rm _* 2> /dev/null
+	-@ rm -f _*
+	-@ git  rm [a-z]* 2> /dev/null
+	-@ rm -f [a-z]*
 
 plus:
-	  - cp -r ../src/docs/* .
-		-rm *.py
-		-git add *
-		
+	- cp -r ../src/docs/* .
+	- rm *.py
+	- git add *
 
 depends :
 	bash depends
-	
+
 typo:  ready 
 	@- git status
 	@- git commit -am "saving"
