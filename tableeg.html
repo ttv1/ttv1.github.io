@@ -48,10 +48,16 @@ def _table1(f="data/weather.csv"):
    if i % 1000 == 0:
      print(i)
    i += 1
-   pass #print("&gt;&gt;",row)</p>
+ print(t)
+ print(t.group["x"])</p>
 <p>@eg
 def _table2():
- _table1("data/weatherLarge.csv")</p>
+ _table1("data/weather100K.csv")</p>
+<p>@eg
+def _table3():
+ import cProfile
+ import re
+ cProfile.run('_table2()')</p>
 <p>if <strong>name</strong> == "<strong>main</strong>" : eg()</p>
     </div>
     <div class='code'>

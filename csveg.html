@@ -60,24 +60,27 @@ def _csvFromString():
 <span class="s">  &quot;Reading a few Ascii rows.&quot;</span>
 <span class="s">  for row in csv(file=&quot;data/weather.csv&quot;):</span>
 <span class="s">    print(row)</span>
-<span class="s">  assert row == [&#39;rainy&#39;, 71.0, 91, &#39;TRUE&#39;, &#39;no&#39;]</span>
+<span class="s">  </span>
+<span class="s">  assert row == [&#39;rainy&#39;, 71.0, &#39;TRUE&#39;, &#39;no&#39;]</span>
 
 <span class="s">@eg</span>
 <span class="s">def _csvFromLargeFile(n=0):</span>
-<span class="s">    &quot;Reading nearly 2M rows from file.&quot;</span>
-<span class="s">    print(&quot;</span><span class="se">\n</span><span class="s">Plz wait 10 seconds while I read 100MB+ of data...&quot;)</span>
+<span class="s">    &quot;Reading over 50MB+ of data.&quot;</span>
+<span class="s">    print(&quot;</span><span class="se">\n</span><span class="s">Plz wait a few seconds while I read 100MB+ of data...&quot;)</span>
 <span class="s">    for row in csv(file=&quot;data/weatherLarge.csv&quot;):</span>
-<span class="s">      n +=1 </span>
-<span class="s">    assert row == [&#39;rainy&#39;, 71.0, 91, &#39;TRUE&#39;, &#39;no&#39;]</span>
+<span class="s">      n +=1</span>
+<span class="s">    print(n,row)</span>
+<span class="s">    assert row == [&#39;rainy&#39;, 71.0, &#39;TRUE&#39;, &#39;no&#39;]</span>
 <span class="s">    assert n == 1835009</span>
 
 <span class="s">@eg</span>
 <span class="s">def _csvFromZip(n=0):</span>
-<span class="s">    &quot;Reading nearly 2M rows from zip.&quot;</span>
+<span class="s">    &quot;Reading over 50MB of data.&quot;</span>
 <span class="s">    for row in csv(file=&quot;weatherLarge.csv&quot;,</span>
 <span class="s">                      zip=&quot;data/data.zip&quot;):</span>
 <span class="s">      n += 1</span>
-<span class="s">    assert row == [&#39;rainy&#39;, 71.0, 91, &#39;TRUE&#39;, &#39;no&#39;]</span>
+<span class="s">      </span>
+<span class="s">    assert row == [&#39;rainy&#39;, 71.0,  91,&#39;TRUE&#39;, &#39;no&#39;]</span>
 <span class="s">    assert n == 1835009</span>
 <span class="s">    </span>
 <span class="s">if __name__ == &quot;__main__&quot;: eg()</span>

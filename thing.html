@@ -134,7 +134,9 @@ Report a <a href="https://github.com/ttv1/src/issues">bug</a>. <img  align=middl
     </div>
     <div class='code'>
       <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-    <span class="k">return</span> <span class="s">&#39;{:txt </span><span class="si">%s</span><span class="s"> :pos </span><span class="si">%s</span><span class="s"> :n </span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">n</span><span class="p">())</span></pre></div>
+    <span class="k">return</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">{:txt </span><span class="si">%s</span><span class="s"> :pos </span><span class="si">%s</span><span class="s"> :n </span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span> <span class="p">(</span>
+              <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span> <span class="k">else</span> <span class="s">&quot;&quot;</span><span class="p">),</span>
+              <span class="n">i</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">n</span><span class="p">())</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

@@ -93,12 +93,16 @@ like https://travis-ci.org/.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-1'>#</a>
       </div>
-      
+      <p>This code resets the random number seed to <code>seed</code> before
+running any examples.</p>
+<p>Two default mutable arguments (<code>lst</code> and <code>runs</code>)
+are used as the working memory for this test engine:
+<code>lst</code> holds the list of example functions that might be executed;
+<code>runs</code> holds counts of how often each example function has been run
+(and this code ensures that function is never executed multiple times).</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="p">[],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-    <span class="n">runs</span><span class="o">=</span><span class="p">{}</span>   <span class="c"># How often have we run an example (and never run an example twice).</span>
-    <span class="p">):</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="p">[],</span> <span class="n">runs</span><span class="o">=</span><span class="p">{}</span> <span class="p">):</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -119,41 +123,14 @@ like https://travis-ci.org/.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-3'>#</a>
       </div>
-      <p>Run all the functions in lst, catching and counting all failures.</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">runall</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">lst</span><span class="p">:</span>
-      <span class="k">print</span><span class="p">(</span><span class="s">&quot;# No known examples.&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">PASS</span><span class="o">=</span><span class="n">FAIL</span><span class="o">=</span><span class="mi">0</span>
-      <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="c">#- Always set the random seed before starting a demo.</span>
-      <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
-          <span class="k">continue</span>
-        <span class="k">try</span><span class="p">:</span> <span class="c"># - Run inside a `try:except:` so one crash does not stop the other examples running</span>
-          <span class="n">run1</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> 
-          <span class="n">PASS</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># If a function terminates correctly, increment `PASS`.</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-          <span class="n">FAIL</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># If a crash, increment `FAIL`.</span>
-          <span class="k">print</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
-      <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">## Test results: PASS = </span><span class="si">%s</span><span class="s"> FAIL = </span><span class="si">%s</span><span class="s"> </span><span class="si">%%</span><span class="s">PASS = </span><span class="si">%s</span><span class="s">&quot;</span>  <span class="o">%</span> <span class="p">(</span>
-            <span class="n">PASS</span><span class="p">,</span> <span class="n">FAIL</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">PASS</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="p">(</span><span class="n">PASS</span><span class="o">+</span><span class="n">FAIL</span><span class="o">+</span><span class="mf">0.001</span><span class="p">)))))</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-4'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-4'>#</a>
-      </div>
       <p>Run one function <code>f</code>, print any output, plus its
-runtime and the functions's name. and doc string (if it exists).</p>
+runtime and the functions's name and doc string (if it exists).
+Called by <code>runall</code>.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">run1</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> 
+    <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># if never run before, this value is now &quot;1&quot;.</span>
+    <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c"># only ever run once.</span>
       <span class="n">hdr</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">-----| </span><span class="si">%s</span><span class="s"> |&quot;</span><span class="o">+</span> <span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span><span class="p">)</span>
       <span class="k">print</span><span class="p">(</span><span class="n">hdr</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s">&quot;</span><span class="se">\n</span><span class="s"># &quot;</span><span class="p">)</span>
       <span class="n">doc</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -162,6 +139,34 @@ runtime and the functions's name. and doc string (if it exists).</p>
       <span class="n">f</span><span class="p">()</span>
       <span class="n">t2</span><span class="o">=</span><span class="n">time</span><span class="o">.</span><span class="n">process_time</span><span class="p">()</span>
       <span class="k">print</span><span class="p">(</span><span class="s">&quot;# pass&quot;</span><span class="p">,</span><span class="s">&quot;(</span><span class="si">%.4f</span><span class="s"> secs)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t2</span><span class="o">-</span><span class="n">t1</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Run all the functions in <code>examples</code>, catching and counting all failures.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">runall</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">examples</span><span class="p">:</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">&quot;# No known examples.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">PASS</span><span class="o">=</span><span class="n">FAIL</span><span class="o">=</span><span class="mi">0</span>
+      <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="c"># Reset the random seed before starting a demo.</span>
+      <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+          <span class="k">continue</span>
+        <span class="k">try</span><span class="p">:</span> <span class="c"># - Run via `try:except:` (so we can contie after crashes)</span>
+          <span class="n">run1</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> 
+          <span class="n">PASS</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># If a function terminates correctly, increment `PASS`.</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+          <span class="n">FAIL</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># If a crash, increment `FAIL`.</span>
+          <span class="k">print</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+      <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">## Test results: PASS = </span><span class="si">%s</span><span class="s"> FAIL = </span><span class="si">%s</span><span class="s"> </span><span class="si">%%</span><span class="s">PASS = </span><span class="si">%s</span><span class="s">&quot;</span>  <span class="o">%</span> <span class="p">(</span>
+            <span class="n">PASS</span><span class="p">,</span> <span class="n">FAIL</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">PASS</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="p">(</span><span class="n">PASS</span><span class="o">+</span><span class="n">FAIL</span><span class="o">+</span><span class="mf">0.001</span><span class="p">)))))</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -291,7 +296,7 @@ it runs just the functions <code>f1,f2,etc</code> from the list of known functio
     <div class='code'>
       <div class="highlight"><pre>  <span class="k">else</span> <span class="p">:</span> 
       <span class="n">runall</span><span class="p">(</span> <span class="n">lst</span> <span class="p">)</span>
-  <span class="k">return</span> <span class="n">f</span></pre></div>
+  <span class="k">return</span> <span class="n">f</span> <span class="c"># `eg` might be a decorator. So return function `f`.</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

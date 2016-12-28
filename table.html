@@ -39,35 +39,37 @@ width=120>
 Report a <a href="https://github.com/ttv1/src/issues">bug</a>. <img  align=middle src="https://github.com/favicon.ico"></em>
 <br clear=all></p>
 <hr />
-<p>from csv   import csv</p>
-<p>class table:
- id = 0
- WHITESPACE = '[\n\r\t]'
- COMMENTS   = '#.*'
- IGNORE     = "-"
- MISSING    = '?'
- COLS       = dict(less= "&lt;",
-                   more= "&gt;",
-                   klass=":",
-                   nums= "$&lt;&gt;",
-                   syms= ":!")       </p>
-<p>def <strong>init</strong>(i,inits=[],file=None,zip=None):
-   i.rows, i.cols, i.all = [],{},[]
-   for key in table.COLS.keys():
-     i.cols[key] = []
-   if file:
-     for row in i.columns(csv(file=file,zip=zip)):
-       i + row
-   [i + row for row in i.columns(inits)]</p>
-<p>def columns(i,src):
-Yields just the columns not marked as missing.</p>
+<p>Given a source of csv data, <code>table</code> reads and stores the rows while at the same
+time keeping statistics on what was seen in each row.</p>
+<p>Column statistics are kept as <code>thing</code>s which are instances of a class that
+watches a stream of data and works out if that column is a numeric or symbolic.
+All these <code>things</code> are stored in <code>table.all</code> as well as in the <em>column groups</em>
+defined in <code>table.COLS</code>.</p>
+<pre><code>  DEFAULT= "x"
+  COLS   = dict(less = "&lt;",   # numeric goals to minimize
+                more = "&gt;",   # numeric goals to maximize
+                klass= ":",   # symbolic goal (for classification) 
+                y    = ":&lt;&gt;"):# all symbols denoting goals
+</code></pre>
+<p>Any column with a header that starts with something else, get stored in the
+group table.DEFAULT.</p>
+<p>By default, <code>table</code> reads all its data at once from a <code>inits</code> list passes to its
+constructor. But <code>table</code> can also read table rows incrementally from strings, a
+file, or a file inside a zip file.</p>
+<p>For very fast csv reads, use <code>csv</code> not <code>table</code>.  <code>Table</code> uses <code>csv</code> as a
+primitive but also keeps extensive statistics on each column.  If those
+statistics are not required, then use <code>csv</code> for (much) faster loads.  For
+example, on one machine, with pypy3, <code>csv</code> can load nearly two million records
+in under six seconds while in the same time <code>table</code> can only load 10,000.</p>
+<p>For clues on how to optimize <code>table</code>, see the profiler output of <code>pypy3
+tableg.py -- _table3</code>.</p>
+<hr />
+<h2>Programmer's Guide</h2>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="n">use</span><span class="o">=</span><span class="p">[]</span>
-    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">src</span><span class="p">:</span>
-      <span class="n">use</span> <span class="o">=</span> <span class="n">use</span> <span class="ow">or</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span><span class="p">,</span><span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
-                        <span class="k">if</span>  <span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">table</span><span class="o">.</span><span class="n">MISSING</span> <span class="p">]</span>
-      <span class="k">yield</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">use</span><span class="p">]</span></pre></div>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">thing</span> <span class="kn">import</span> <span class="n">thing</span>
+<span class="kn">from</span> <span class="nn">csv</span>   <span class="kn">import</span> <span class="n">csv</span>
+<span class="kn">import</span> <span class="nn">sys</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -79,8 +81,13 @@ Yields just the columns not marked as missing.</p>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
-    <span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">all</span> <span class="k">else</span> <span class="n">i</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">table</span><span class="p">:</span>
+  <span class="n">DEFAULT</span>    <span class="o">=</span> <span class="s">&quot;x&quot;</span>
+  <span class="n">COLS</span>       <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">less</span> <span class="o">=</span> <span class="s">&quot;&lt;&quot;</span><span class="p">,</span>   <span class="c"># numeric goals to be minimized</span>
+                    <span class="n">more</span> <span class="o">=</span> <span class="s">&quot;&gt;&quot;</span><span class="p">,</span>   <span class="c"># numeric goals to be maximized</span>
+                    <span class="n">klass</span><span class="o">=</span> <span class="s">&quot;:&quot;</span><span class="p">,</span>   <span class="c"># symbolic goal (used for classification) </span>
+                    <span class="n">y</span>    <span class="o">=</span> <span class="s">&quot;:&lt;&gt;&quot;</span>  <span class="c"># all symbols denoting goals</span>
+                    <span class="p">)</span>             <span class="c"># (any any other thing goes into table.DEFAULT)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -89,19 +96,19 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
       </div>
-      
+      <p>Read table either from a <code>str</code>, a <code>file</code>, a <code>file</code> in a <code>zip</code>
+or from some <code>inits</code> list.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">col</span><span class="p">,</span><span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-      <span class="k">if</span> <span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">table</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">:</span>
-        <span class="n">column</span>  <span class="o">=</span> <span class="n">thing</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
-        <span class="n">i</span><span class="o">.</span><span class="n">all</span>  <span class="o">+=</span> <span class="p">[</span><span class="n">column</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">chars</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">COLS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-          <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">chars</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">char</span><span class="p">:</span>
-              <span class="k">print</span><span class="p">(</span><span class="n">char</span><span class="p">,</span><span class="n">col</span><span class="p">,</span><span class="n">cell</span><span class="p">)</span>
-              <span class="n">i</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">column</span><span class="p">]</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">inits</span><span class="o">=</span><span class="p">[],</span><span class="nb">str</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="nb">file</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="nb">zip</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">rows</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">all</span> <span class="o">=</span> <span class="p">[],{},[]</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="n">table</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">COLS</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+      <span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">file</span><span class="p">:</span>
+      <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv</span><span class="p">(</span><span class="nb">str</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="nb">zip</span><span class="o">=</span><span class="nb">zip</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">+</span> <span class="n">row</span>
+    <span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">inits</span><span class="p">]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -113,7 +120,10 @@ Yields just the columns not marked as missing.</p>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s">&#39;{:rows </span><span class="si">%s</span><span class="s"> :less </span><span class="si">%s</span><span class="s"> :more </span><span class="si">%s</span><span class="s"> :klass </span><span class="si">%s</span><span class="s"> :x </span><span class="si">%s</span><span class="s"> :y </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">rows</span><span class="p">),</span>           <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s">&quot;less&quot;</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s">&quot;more&quot;</span><span class="p">]),</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s">&quot;klass&quot;</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s">&quot;x&quot;</span><span class="p">]),</span>    <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s">&quot;y&quot;</span><span class="p">]))</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -122,10 +132,11 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-4'>#</a>
       </div>
-      
+      <p>If <code>all</code> is defined, we are beyong the first header row.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">class</span> <span class="nc">_row</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">all</span> <span class="k">else</span> <span class="n">i</span><span class="o">.</span><span class="n">header</span><span class="p">(</span><span class="n">row</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -134,12 +145,22 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-5'>#</a>
       </div>
-      
+      <p>Create one <code>thing</code> for each column.
+Store that <code>thing</code> in <code>all</code> as well as 
+in its associated <code>COLS</code> group.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">lst</span><span class="p">):</span>
-        <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">id</span><span class="o">+</span><span class="mi">1</span>
-        <span class="n">i</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">lst</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">header</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">col</span><span class="p">,</span><span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+      <span class="n">t</span>      <span class="o">=</span> <span class="n">thing</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">txt</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+      <span class="n">i</span><span class="o">.</span><span class="n">all</span> <span class="o">+=</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+      <span class="n">placed</span> <span class="o">=</span> <span class="bp">False</span>
+      <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">chars</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">COLS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">chars</span><span class="p">:</span>
+          <span class="k">if</span> <span class="n">cell</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">char</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">char</span><span class="p">,</span><span class="n">col</span><span class="p">,</span><span class="n">cell</span><span class="p">)</span>
+            <span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span>
+            <span class="n">placed</span> <span class="o">=</span> <span class="bp">True</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -148,10 +169,11 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-6'>#</a>
       </div>
-      
+      <p>If we can't place it anywhere else, place it in <code>table.DEFAULT</code>.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>       <span class="p">:</span> <span class="k">return</span> <span class="s">&#39;#</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>      <span class="k">if</span> <span class="ow">not</span> <span class="n">placed</span><span class="p">:</span>
+        <span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="n">table</span><span class="o">.</span><span class="n">DEFAULT</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">t</span><span class="p">]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -160,10 +182,13 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-7'>#</a>
       </div>
-      
+      <p>Update the statistics held in each thing for each column.
+Keep the data in <code>rows</code>.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>  <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+    <span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">rows</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">row</span> <span class="p">]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -172,10 +197,10 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-8'>#</a>
       </div>
-      
+      <h3>Misc utilitie</h3>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">):</span> <span class="n">i</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span></pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -184,10 +209,11 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-9'>#</a>
       </div>
-      
+      <p>Return the klass value of a row (there should only be one).</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>        <span class="p">:</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">raw</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">klass</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">klass</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -196,10 +222,21 @@ Yields just the columns not marked as missing.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-10'>#</a>
       </div>
-      
+      <p>Compute Euclidean distance between two rows.
+Makes use of sevices defined in each thing in <code>all</code>.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>       <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span> <span class="n">what</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">ds</span><span class="p">,</span><span class="n">ns</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mf">1e-32</span>
+    <span class="n">what</span> <span class="o">=</span> <span class="n">what</span> <span class="ow">or</span> <span class="n">table</span><span class="o">.</span><span class="n">DEFAULT</span>
+    <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">what</span><span class="p">:</span>
+      <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="n">ts</span><span class="p">]:</span>
+        <span class="n">d</span><span class="p">,</span><span class="n">n</span>  <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">j</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">pos</span><span class="p">],</span>
+                         <span class="n">k</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">pos</span><span class="p">],</span>
+                         <span class="n">csv</span><span class="o">.</span><span class="n">MISSING</span><span class="p">)</span>
+        <span class="n">ds</span>  <span class="o">+=</span> <span class="n">d</span>
+        <span class="n">ns</span>  <span class="o">+=</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">ds</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">/</span> <span class="n">ns</span><span class="o">**</span><span class="mf">0.5</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -207,33 +244,6 @@ Yields just the columns not marked as missing.</p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-11'>#</a>
-      </div>
-      
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>       <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">j</span><span class="o">.</span><span class="n">id</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-12'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-12'>#</a>
-      </div>
-      
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>      <span class="k">def</span> <span class="nf">__ne__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>       <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">j</span><span class="o">.</span><span class="n">id</span>
-    <span class="n">row</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">row</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]</span>
-    
-    <span class="n">i</span><span class="o">.</span><span class="n">rows</span> <span class="o">+=</span> <span class="p">[</span> <span class="n">_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="p">]</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-13'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-13'>#</a>
       </div>
       <hr />
 <p><img align=right 
