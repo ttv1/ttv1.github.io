@@ -93,12 +93,14 @@ like https://travis-ci.org/.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-1'>#</a>
       </div>
-      
+      <p>This code uses two default mutable argument (<code>lst</code> and <code>runs</code>)
+as the working memory for this test engine.</p>
+<p><code>lst</code> holds the list of example functions that might be executed,</p>
+<p><code>runs</code> holds counts of how often each example function has been run
+(and this code ensures that function is never executed multiple times).</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="p">[],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-    <span class="n">runs</span><span class="o">=</span><span class="p">{}</span>   <span class="c"># How often have we run an example (and never run an example twice).</span>
-    <span class="p">):</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="p">[],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">runs</span><span class="o">=</span><span class="p">{}</span> <span class="p">):</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -152,8 +154,8 @@ runtime and the functions's name. and doc string (if it exists).</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">run1</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
-    <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> 
+    <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># if never run before, this value is now &quot;1&quot;.</span>
+    <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c"># only ever run once.</span>
       <span class="n">hdr</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">-----| </span><span class="si">%s</span><span class="s"> |&quot;</span><span class="o">+</span> <span class="p">(</span><span class="s">&quot;-&quot;</span><span class="o">*</span><span class="mi">40</span><span class="p">)</span>
       <span class="k">print</span><span class="p">(</span><span class="n">hdr</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s">&quot;</span><span class="se">\n</span><span class="s"># &quot;</span><span class="p">)</span>
       <span class="n">doc</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
