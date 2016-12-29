@@ -68,8 +68,7 @@ tableg.py -- _table3</code>.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kn">from</span> <span class="nn">thing</span> <span class="kn">import</span> <span class="n">thing</span>
-<span class="kn">from</span> <span class="nn">csv</span>   <span class="kn">import</span> <span class="n">csv</span>
-<span class="kn">import</span> <span class="nn">sys</span></pre></div>
+<span class="kn">from</span> <span class="nn">csv</span>   <span class="kn">import</span> <span class="n">csv</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -197,7 +196,7 @@ Keep the data in <code>rows</code>.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-8'>#</a>
       </div>
-      <h3>Misc utilitie</h3>
+      <h3>Misc utilities</h3>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -209,11 +208,14 @@ Keep the data in <code>rows</code>.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-9'>#</a>
       </div>
-      <p>Return the klass value of a row (there should only be one).</p>
+      <p>Return a table just like this one,
+but withtout the row data</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">klass</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="o">.</span><span class="n">klass</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">twin</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">inits</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">table</span><span class="p">([[</span><span class="n">t</span><span class="o">.</span><span class="n">txt</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">all</span><span class="p">]])</span>
+    <span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inits</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">t</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -221,6 +223,32 @@ Keep the data in <code>rows</code>.</p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>Return the first klass value of a row </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">klass</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s">&quot;klass&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>Return the first goal value of a row </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">goal</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">group</span><span class="p">[</span><span class="s">&quot;y&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
       </div>
       <p>Compute Euclidean distance between two rows.
 Makes use of sevices defined in each thing in <code>all</code>.</p>
@@ -240,10 +268,10 @@ Makes use of sevices defined in each thing in <code>all</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-11'>
+  <div class='section' id='section-13'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-11'>#</a>
+        <a class='octothorpe' href='#section-13'>#</a>
       </div>
       <hr />
 <p><img align=right 
