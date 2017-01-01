@@ -57,34 +57,40 @@ width=120>
 </form></p>
 <p><br clear=all></p>
 <hr />
-<p>import itertools</p>
-<p>def rx(klass,*<em>d):
- lst = [[(k,v) for v
-         in (vs if type(vs)==list else [vs])]
-          for k,vs in d.items()]
- lst = list( itertools.product(</em>lst) )
- for settings in lst:
-   d = {k:v for k,v in settings}
-   with rx1(klass,d):
-     yield d</p>
-<p>@contextmanager
-def rx1(klass, d):
- b4 = {k: getattr(klass,k) for k in d}
- for k in d:
-   setattr(klass,k,d[k])
- try:
-   yield
- finally:
-   for k in b4:
-     setattr(klass,k,b4[k])</p>
+<p>Run some some experiments, setting some globals,
+the un-doing those changes once the experiment fails.</p>
+<p>Example:</p>
+<pre><code> class silly:
+   X=1
+   Y=min
+ class solly:
+   Z=22
+   B="love"
+ def f1():
+   return 3&gt;1
+
+ # begin experiments
+ for _ in rx(solly, Z=[20,30], B=["love","hate"]):
+   for _ in rx(  silly, X=[2,3], Y=[max,f1]):
+     # insert your experiment here
+     assert silly.X != 1
+     assert solly.Z != 22
+
+ # afterwards, we are back to the old values.
+ assert silly.X == 1
+ assert solly.Z == 22
+</code></pre>
+<hr />
+<h2>Programmer's Guide</h2>
+<p>In the following,  <code>klass</code> is some with attributes <code>k.v1,k.v2,..</code> etc
+which we want to (temporarily) set 
+to something else (and the something else comes from
+the values in the dictionary <code>**d</code>). </p>
+<p>Note that the
+values in <code>d</code> can be lists or a single items</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="n">____</span>
-
-
-<span class="o">&lt;</span><span class="n">img</span> <span class="n">align</span><span class="o">=</span><span class="n">right</span> 
-<span class="n">src</span><span class="o">=</span><span class="s">&quot;https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png&quot;</span>
-<span class="n">width</span><span class="o">=</span><span class="mi">170</span><span class="o">&gt;</span></pre></div>
+      <div class="highlight"><pre><span class="kn">import</span> <span class="nn">itertools</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -93,18 +99,11 @@ def rx1(klass, d):
       <div class='octowrap'>
         <a class='octothorpe' href='#section-1'>#</a>
       </div>
-      <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copyleft</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(just another timm tool)</p>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="n">Copyright</span> <span class="o">&amp;</span><span class="n">copy</span><span class="p">;</span> <span class="mi">2016</span> <span class="n">Tim</span> <span class="n">Menzies</span> <span class="o">&lt;</span><span class="n">tim</span><span class="nd">@menzies.us</span><span class="o">&gt;</span>
-
-<span class="n">This</span> <span class="n">program</span> <span class="ow">is</span> <span class="n">free</span> <span class="n">software</span><span class="o">.</span> <span class="n">It</span> <span class="n">comes</span> <span class="n">without</span> <span class="nb">any</span> <span class="n">warranty</span><span class="p">,</span> <span class="n">to</span>
-<span class="n">the</span> <span class="n">extent</span> <span class="n">permitted</span> <span class="n">by</span> <span class="n">applicable</span> <span class="n">law</span><span class="o">.</span> <span class="n">You</span> <span class="n">can</span> <span class="n">redistribute</span> <span class="n">it</span>
-<span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="n">modify</span> <span class="n">it</span> <span class="n">under</span> <span class="n">the</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">the</span> <span class="n">Do</span> <span class="n">What</span> <span class="n">The</span> <span class="n">F</span><span class="o">*</span><span class="n">ck</span> <span class="n">You</span> <span class="n">Want</span>
-<span class="n">To</span> <span class="n">Public</span> <span class="n">License</span><span class="p">,</span> <span class="n">Version</span> <span class="mi">2</span><span class="p">,</span> <span class="k">as</span> <span class="n">published</span> <span class="n">by</span> <span class="n">Sam</span> <span class="n">Hocevar</span><span class="o">.</span> <span class="n">See</span>
-<span class="p">[</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">wtfpl</span><span class="o">.</span><span class="n">net</span><span class="p">](</span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">wtfpl</span><span class="o">.</span><span class="n">net</span><span class="p">)</span> <span class="k">for</span> <span class="n">more</span> <span class="n">details</span><span class="o">.</span>
-
-<span class="n">Share</span> <span class="ow">and</span> <span class="n">enjoy</span><span class="o">.</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">rx</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="o">**</span><span class="n">d</span><span class="p">):</span>
+  <span class="n">lst</span> <span class="o">=</span> <span class="p">[[(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -113,12 +112,136 @@ def rx1(klass, d):
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
       </div>
-      
+      <p>Ensure k's value is something we can iterate over. </p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre></pre></div>
+      <div class="highlight"><pre>          <span class="p">(</span><span class="n">vs</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span><span class="o">==</span><span class="nb">list</span> <span class="k">else</span> <span class="p">[</span><span class="n">vs</span><span class="p">])]</span> 
+           <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">vs</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>Generate all combinations.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">combos</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">lst</span><span class="p">)</span> <span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Run over the combinations.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">combos</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Cache the old settings.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">b4</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span><span class="nb">getattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>Impose the temp settings.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">:</span>
+      <span class="nb">setattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Let something do something with the temp settings.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">yield</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p>Reset to old.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">b4</span><span class="p">:</span>
+      <span class="nb">setattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <hr />
+<p><img align=right 
+src="https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png"
+width=170></p>
+<h2>Copyleft</h2>
+<p>Copyright &copy; 2016 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a></p>
+<p>This program is free software. It comes without any warranty, to
+the extent permitted by applicable law. You can redistribute it
+and/or modify it under the terms of the Do What The F*ck You Want
+To Public License, Version 2, as published by Sam Hocevar. See
+<a href="http://www.wtfpl.net">http://www.wtfpl.net</a> for more details.</p>
+<p>Share and enjoy.</p>
+
+<hr>
+<a name="discussion"><h2>Discussion</h2></a>
+<div id="disqus_thread"></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+/*
+ var disqus_config = function () {
+this.page.url = 'https://ttv1.github.ip/rx.html'
+this.page.identifier = 'rx';
+ };
+ */
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//ttv1.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  </div>
+  <div class='code'>
+    <div class="highlight"><pre></pre></div>
+  </div>
 </div>
+<div class='clearall'></div>
+</div>
+<script id="dsq-count-scr" src="//ttv1.disqus.com/count.js" async></script>
 </body>
+</html>
