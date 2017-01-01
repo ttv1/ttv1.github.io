@@ -101,7 +101,7 @@ are used as the working memory for this test engine:
 (and this code ensures that function is never executed multiple times).</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="p">[],</span> <span class="n">runs</span><span class="o">=</span><span class="p">{}</span> <span class="p">):</span></pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -110,10 +110,10 @@ are used as the working memory for this test engine:
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
       </div>
-      <h3>Controlling the runs</h3>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre></pre></div>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg</span><span class="p">(</span><span class="n">f</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lst</span><span class="o">=</span><span class="p">[],</span> <span class="n">runs</span><span class="o">=</span><span class="p">{}</span> <span class="p">):</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -121,6 +121,18 @@ are used as the working memory for this test engine:
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <h3>Controlling the runs</h3>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
       </div>
       <p>Run one function <code>f</code>, print any output, plus its
 runtime and the functions's name and doc string (if it exists).
@@ -141,10 +153,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-4'>
+  <div class='section' id='section-5'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-4'>#</a>
+        <a class='octothorpe' href='#section-5'>#</a>
       </div>
       <p>Run all the functions in <code>examples</code>, catching and counting all failures.</p>
     </div>
@@ -169,10 +181,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-5'>
+  <div class='section' id='section-6'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-5'>#</a>
+        <a class='octothorpe' href='#section-6'>#</a>
       </div>
       <hr />
 <h3>Misc helper functions</h3>
@@ -182,10 +194,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-6'>
+  <div class='section' id='section-7'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-6'>#</a>
+        <a class='octothorpe' href='#section-7'>#</a>
       </div>
       <p>Print function doco, it it has any. 
  It a multi-line string, print the lines left justified.</p>
@@ -197,10 +209,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-7'>
+  <div class='section' id='section-8'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-7'>#</a>
+        <a class='octothorpe' href='#section-8'>#</a>
       </div>
       <p>Return just the examples mentioned on the command line.</p>
     </div>
@@ -211,10 +223,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-8'>
+  <div class='section' id='section-9'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-8'>#</a>
+        <a class='octothorpe' href='#section-9'>#</a>
       </div>
       <p>For all items in lst, print their doc string.</p>
     </div>
@@ -228,10 +240,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-9'>
+  <div class='section' id='section-10'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-9'>#</a>
+        <a class='octothorpe' href='#section-10'>#</a>
       </div>
       <hr />
 <h3>Run the script</h3>
@@ -241,10 +253,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-10'>
+  <div class='section' id='section-11'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-10'>#</a>
+        <a class='octothorpe' href='#section-11'>#</a>
       </div>
       <p>If called as a decorator, add the function to the list of known functions.</p>
     </div>
@@ -256,10 +268,10 @@ Called by <code>runall</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-11'>
+  <div class='section' id='section-12'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-11'>#</a>
+        <a class='octothorpe' href='#section-12'>#</a>
       </div>
       <p>Else if called with the command line <code>python Xeg.py -?</code>,
 it lists all the known functions, and their
@@ -271,10 +283,10 @@ documentation strings, in the file <code>Xeg.py</code>.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-12'>
+  <div class='section' id='section-13'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-12'>#</a>
+        <a class='octothorpe' href='#section-13'>#</a>
       </div>
       <p>Else if called with the command line <code>python Xeg.py -- f1 f2 etc</code>,
 it runs just the functions <code>f1,f2,etc</code> from the list of known functions.</p>
@@ -285,10 +297,10 @@ it runs just the functions <code>f1,f2,etc</code> from the list of known functio
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-13'>
+  <div class='section' id='section-14'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-13'>#</a>
+        <a class='octothorpe' href='#section-14'>#</a>
       </div>
       <p>Otherwise, it runs everything in the list of known functions.</p>
     </div>
@@ -299,10 +311,10 @@ it runs just the functions <code>f1,f2,etc</code> from the list of known functio
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-14'>
+  <div class='section' id='section-15'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-14'>#</a>
+        <a class='octothorpe' href='#section-15'>#</a>
       </div>
       <hr />
 <p><img align=right 

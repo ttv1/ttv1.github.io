@@ -217,7 +217,7 @@ the number of items seen by this <code>thing</code>. </p>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">cliffsDelta</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">):</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">cliffsDelta</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>     <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">dist</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -229,7 +229,7 @@ the number of items seen by this <code>thing</code>. </p>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">ranges</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>       <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">ranges</span><span class="p">()</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">cliffsDelta</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">):</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">cliffsDelta</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -241,7 +241,7 @@ the number of items seen by this <code>thing</code>. </p>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">bootstrap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">ranges</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>       <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">ranges</span><span class="p">()</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -253,7 +253,7 @@ the number of items seen by this <code>thing</code>. </p>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">same_CD</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>    <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">cliffsDelta</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>  <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">(</span><span class="n">j</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">bootstrap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>  <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">samples</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">samples</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -262,10 +262,10 @@ the number of items seen by this <code>thing</code>. </p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-12'>#</a>
       </div>
-      <p>Parametric. assumes gaussians</p>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">same_HT</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>    <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">hedges</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">ttest</span><span class="p">(</span><span class="n">j</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">same_CD</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>    <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">cliffsDelta</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>  <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">bootstrap</span><span class="p">(</span><span class="n">j</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -274,10 +274,10 @@ the number of items seen by this <code>thing</code>. </p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-13'>#</a>
       </div>
-      
+      <p>Parametric. assumes gaussians</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">ttest</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>      <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">ttest</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">my</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">same_HT</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>    <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">hedges</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">ttest</span><span class="p">(</span><span class="n">j</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -285,6 +285,18 @@ the number of items seen by this <code>thing</code>. </p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">ttest</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>      <span class="p">:</span> <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">my</span><span class="o">.</span><span class="n">ttest</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">my</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
       </div>
       <hr />
 <p><img align=right 

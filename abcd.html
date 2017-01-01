@@ -72,8 +72,71 @@ calculates accuracy, recall, false alarm rate, precision, f, g etc.</p>
    a c
    a d
    b a
+   EOF
 </code></pre>
 <p>This prints out the same report as above.</p>
+<h3>Notes on Performance Measures</h3>
+<p>Classifiers can be assessed according to the following measures:</p>
+<pre><code>                                  Example has class X
+                                  +-------+-----+
+                                  | not X |  X  |
+                            +-----+-------+-----+
+  classifier predicts not X |  no |     a |  b  |
+                            +-----+-------+-----+
+  classifier predicts X     | yes |     c |  d  |
+                            +-----+-------+-----+
+
+   accuracy         = acc          = (a+d)/(a+b+c+d
+   prob detection   = pd  = recall = d/(b+d)
+   prob false alarm = pf           = c/(a+c)
+   precision        = prec         = d/(c+d)
+</code></pre>
+<p>Ideally, detectors have high PDs, low PFs, and low
+effort. This ideal state rarely happens:</p>
+<ul>
+<li>
+<p>PD and effort are linked. The more modules that trigger
+the detector, the higher the PD. However, effort also gets
+increases</p>
+</li>
+<li>
+<p>High PD or low PF comes at the cost of high PF or low PD
+(respectively). This linkage can be seen in a standard
+receiver operator curve (ROC).  Suppose, for example, LOC&gt; x
+is used as the detector (i.e. we assume large modules have
+more errors). LOC &gt; x represents a family of detectors. At
+x=0, EVERY module is predicted to have errors. This detector
+has a high PD but also a high false alarm rate. At x=0, NO
+module is predicted to have errors. This detector has a low
+false alarm rate but won't detect anything at all. At 0&lt;x&lt;1,
+a set of detectors are generated as shown below:</p>
+<pre><code> pd
+1 |           x  x  x   KEY:
+  |        x     .      "."  denotes the line PD=PF
+  |     x      .        "x"  denotes the roc curve 
+  |   x      .               for a set of detectors
+  |  x     .
+  | x    . 
+  | x  .
+  |x .
+  |x
+  x------------------ pf    
+  0                   1
+</code></pre>
+</li>
+</ul>
+<p>Note that:</p>
+<ul>
+<li>The only way to make no mistakes (PF=0) is to do nothing
+(PD=0)</li>
+<li>The only way to catch more detects is to make more
+mistakes (increasing PD means increasing PF).</li>
+<li>Our detector bends towards the "sweet spot" of
+<PD=1,PF=0> but does not reach it.</li>
+<li>The line pf=pd on the above graph represents the "no information"
+line. If pf=pd then the detector is pretty useless. The better
+the detector, the more it rises above PF=PD towards the "sweet spot".</li>
+</ul>
 <hr />
 <h2>Programmer's guide</h2>
     </div>
@@ -103,7 +166,7 @@ calculates accuracy, recall, false alarm rate, precision, f, g etc.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">db</span><span class="o">=</span><span class="s">&quot;all&quot;</span><span class="p">,</span><span class="n">rx</span><span class="o">=</span><span class="s">&quot;all&quot;</span><span class="p">):</span>
-    <span class="n">i</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span><span class="p">;</span> <span class="n">i</span><span class="o">.</span><span class="n">rx</span><span class="o">=</span><span class="n">rx</span><span class="p">;</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">db</span><span class="p">);</span> <span class="n">i</span><span class="o">.</span><span class="n">rx</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">rx</span><span class="p">);</span>
     <span class="n">i</span><span class="o">.</span><span class="n">yes</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">no</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">i</span><span class="o">.</span><span class="n">known</span> <span class="o">=</span> <span class="p">{};</span> <span class="n">i</span><span class="o">.</span><span class="n">a</span><span class="o">=</span> <span class="p">{};</span> <span class="n">i</span><span class="o">.</span><span class="n">b</span><span class="o">=</span> <span class="p">{};</span> <span class="n">i</span><span class="o">.</span><span class="n">c</span><span class="o">=</span> <span class="p">{};</span> <span class="n">i</span><span class="o">.</span><span class="n">d</span><span class="o">=</span><span class="p">{}</span></pre></div>
     </div>
@@ -227,12 +290,10 @@ the "a" value (true negatives).</p>
     <div class='code'>
       <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">n</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="p">:</span> <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
-    
+    <span class="n">ass</span><span class="o">=</span><span class="n">bs</span><span class="o">=</span><span class="n">cs</span><span class="o">=</span><span class="n">ds</span><span class="o">=</span><span class="n">accs</span><span class="o">=</span><span class="n">pds</span><span class="o">=</span><span class="n">pfs</span><span class="o">=</span><span class="n">precs</span><span class="o">=</span><span class="n">fs</span><span class="o">=</span><span class="n">gs</span><span class="o">=</span><span class="n">yess</span><span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i</span><span class="o">.</span><span class="n">known</span><span class="p">:</span>
       <span class="n">pd</span>  <span class="o">=</span> <span class="n">pf</span> <span class="o">=</span> <span class="n">pn</span> <span class="o">=</span> <span class="n">prec</span> <span class="o">=</span> <span class="n">g</span> <span class="o">=</span> <span class="n">f</span> <span class="o">=</span> <span class="n">acc</span> <span class="o">=</span> <span class="mi">0</span>
-
       <span class="n">a</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">];</span> <span class="n">b</span><span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">];</span> <span class="n">c</span><span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">c</span><span class="p">[</span><span class="n">x</span><span class="p">];</span> <span class="n">d</span><span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
-      
       <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">d</span><span class="p">)</span>    <span class="p">:</span> <span class="n">pd</span>   <span class="o">=</span> <span class="n">d</span>     <span class="o">/</span> <span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">d</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">c</span><span class="p">)</span>    <span class="p">:</span> <span class="n">pf</span>   <span class="o">=</span> <span class="n">c</span>     <span class="o">/</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">c</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">c</span><span class="p">)</span>    <span class="p">:</span> <span class="n">pn</span>   <span class="o">=</span> <span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">c</span><span class="p">)</span>
@@ -241,11 +302,9 @@ the "a" value (true negatives).</p>
       <span class="k">if</span> <span class="p">(</span><span class="n">prec</span><span class="o">+</span><span class="n">pd</span><span class="p">):</span> <span class="n">f</span>    <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">prec</span><span class="o">*</span><span class="n">pd</span><span class="o">/</span><span class="p">(</span><span class="n">prec</span><span class="o">+</span><span class="n">pd</span><span class="p">)</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">yes</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="n">no</span><span class="p">):</span> <span class="n">acc</span><span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">yes</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">yes</span><span class="o">+</span><span class="n">i</span><span class="o">.</span><span class="n">no</span><span class="p">)</span>
       <span class="n">out</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">oo</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">rx</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">rx</span><span class="p">,</span> <span class="n">yes</span><span class="o">=</span> <span class="n">n</span><span class="p">(</span><span class="n">b</span><span class="o">+</span><span class="n">d</span><span class="p">),</span>
-                  <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">yes</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="n">no</span><span class="p">),</span>
                  <span class="nb">all</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="o">+</span><span class="n">c</span><span class="o">+</span><span class="n">d</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">a</span><span class="p">),</span>
                  <span class="n">b</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">d</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">acc</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">acc</span><span class="p">),</span> <span class="n">pd</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">pd</span><span class="p">),</span>
-                 <span class="n">pf</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">pf</span><span class="p">),</span> <span class="n">prec</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">prec</span><span class="p">),</span> <span class="n">f</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">g</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">g</span><span class="p">),</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">out</span></pre></div>
+                 <span class="n">pf</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">pf</span><span class="p">),</span> <span class="n">prec</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">prec</span><span class="p">),</span> <span class="n">f</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">g</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">g</span><span class="p">),</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -254,40 +313,26 @@ the "a" value (true negatives).</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-11'>#</a>
       </div>
-      <p>Write the performance scores for each class, then the
-weighted sum of those scores across all classes.</p>
+      <p>computer weighted sums</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">report</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
-    <span class="n">i</span><span class="o">.</span><span class="n">header</span><span class="p">()</span>
-    <span class="n">db</span> <span class="o">=</span> <span class="n">rx</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-    <span class="n">yes</span><span class="o">=</span><span class="n">a</span><span class="o">=</span><span class="n">b</span><span class="o">=</span><span class="n">c</span><span class="o">=</span><span class="n">d</span><span class="o">=</span><span class="n">acc</span><span class="o">=</span><span class="n">pd</span><span class="o">=</span><span class="n">pf</span><span class="o">=</span><span class="n">prec</span><span class="o">=</span><span class="n">f</span><span class="o">=</span><span class="n">g</span><span class="o">=</span><span class="mi">0</span>
-    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">scores</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-      <span class="k">print</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">,</span>
-       <span class="p">(</span><span class="s">&#39;{0:20s} {1:10s} {2:4d} {3:4d} {4:4d}&#39;</span><span class="o">+</span>\
-        <span class="s">&#39;{5:4d} {6:4d} {7:4d} {8:3d} {9:3d} &#39;</span><span class="o">+</span> \
-        <span class="s">&#39;{10:3d} {11:3d} {12:3d} {13:10s}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-          <span class="n">s</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">rx</span><span class="p">,</span>  <span class="n">s</span><span class="o">.</span><span class="n">yes</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> 
-          <span class="n">s</span><span class="o">.</span><span class="n">acc</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">pd</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">pf</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">prec</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
-      <span class="n">a</span>    <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">a</span>    <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">b</span>    <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span>    <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">c</span>    <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">c</span>    <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">d</span>    <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">d</span>    <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">acc</span>  <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">acc</span>  <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">pd</span>   <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">pd</span>   <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">pf</span>   <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">pf</span>   <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">prec</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">prec</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">f</span>    <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">f</span>    <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">g</span>    <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">g</span>    <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">yes</span>  <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="n">yes</span>  <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">r</span>
-      <span class="n">db</span><span class="p">,</span><span class="n">rx</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">rx</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&#39;-&#39;</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">,</span>
-       <span class="p">(</span><span class="s">&#39;{0:20s} {1:10s} {2:4.0f} {3:4.0f} {4:4.0f}&#39;</span><span class="o">+</span>\
-        <span class="s">&#39;{5:4.0f} {6:4.0f} {7:4.0f} {8:3.0f} {9:3.0f} &#39;</span><span class="o">+</span> \
-        <span class="s">&#39;{10:3.0f} {11:3.0f} {12:3.0f} {13:10s}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-          <span class="n">db</span><span class="p">,</span>  <span class="n">rx</span><span class="p">,</span>  <span class="n">yes</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> 
-          <span class="n">acc</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">pf</span><span class="p">,</span> <span class="n">prec</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">))</span></pre></div>
+      <div class="highlight"><pre>      <span class="n">ratio</span>  <span class="o">=</span> <span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">yes</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="n">no</span><span class="p">)</span>
+      <span class="n">ass</span>   <span class="o">+=</span> <span class="n">a</span>    <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">bs</span>    <span class="o">+=</span> <span class="n">b</span>    <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">cs</span>    <span class="o">+=</span> <span class="n">c</span>    <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">ds</span>    <span class="o">+=</span> <span class="n">d</span>    <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">accs</span>  <span class="o">+=</span> <span class="n">acc</span>  <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">pds</span>   <span class="o">+=</span> <span class="n">pd</span>   <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">pfs</span>   <span class="o">+=</span> <span class="n">pf</span>   <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">precs</span> <span class="o">+=</span> <span class="n">prec</span> <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">fs</span>    <span class="o">+=</span> <span class="n">f</span>    <span class="o">*</span> <span class="n">ratio</span>
+      <span class="n">gs</span>    <span class="o">+=</span> <span class="n">g</span>    <span class="o">*</span> <span class="n">ratio</span>
+    <span class="n">out</span><span class="p">[</span><span class="s">&quot;__all__&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">oo</span><span class="p">(</span>
+      <span class="n">db</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">rx</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">rx</span><span class="p">,</span> <span class="n">yes</span><span class="o">=</span> <span class="n">n</span><span class="p">(</span><span class="n">yess</span><span class="p">),</span>
+      <span class="nb">all</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">ass</span><span class="o">+</span><span class="n">bs</span><span class="o">+</span><span class="n">cs</span><span class="o">+</span><span class="n">ds</span><span class="p">),</span> <span class="n">a</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">ass</span><span class="p">),</span>
+      <span class="n">b</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">bs</span><span class="p">),</span> <span class="n">c</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">cs</span><span class="p">),</span> <span class="n">d</span><span class="o">=</span><span class="n">n</span><span class="p">(</span><span class="n">ds</span><span class="p">),</span> <span class="n">acc</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">accs</span><span class="p">),</span> <span class="n">pd</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">pds</span><span class="p">),</span>
+      <span class="n">pf</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">pfs</span><span class="p">),</span> <span class="n">prec</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">precs</span><span class="p">),</span> <span class="n">f</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">fs</span><span class="p">),</span> <span class="n">g</span><span class="o">=</span><span class="n">p</span><span class="p">(</span><span class="n">gs</span><span class="p">),</span><span class="n">x</span><span class="o">=</span><span class="s">&quot;__all__&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -295,6 +340,28 @@ weighted sum of those scores across all classes.</p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>Write the performance scores for each class, then the
+weighted sum of those scores across all classes.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">report</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">brief</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">header</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">scores</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">brief</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;#&quot;</span><span class="p">,</span>
+              <span class="p">(</span><span class="s">&#39;{0:20s} {1:10s} {2:4d} {3:4d} {4:4d}&#39;</span><span class="o">+</span>\
+               <span class="s">&#39;{5:4d} {6:4d} {7:4d} {8:3d} {9:3d} &#39;</span><span class="o">+</span> \
+               <span class="s">&#39;{10:3d} {11:3d} {12:3d} {13:10s}&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">db</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">rx</span><span class="p">,</span>  <span class="n">s</span><span class="o">.</span><span class="n">yes</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">d</span><span class="p">,</span> 
+                 <span class="n">s</span><span class="o">.</span><span class="n">acc</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">pd</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">pf</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">prec</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
       </div>
       <p>Tool for reading in the data from standard input.</p>
     </div>
@@ -312,10 +379,10 @@ weighted sum of those scores across all classes.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-13'>
+  <div class='section' id='section-14'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-13'>#</a>
+        <a class='octothorpe' href='#section-14'>#</a>
       </div>
       <hr />
 <p><img align=right 
