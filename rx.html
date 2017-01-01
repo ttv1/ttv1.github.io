@@ -90,7 +90,7 @@ the values in the dictionary <code>**d</code>). </p>
 values in <code>d</code> can be lists or a single items</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="kn">import</span> <span class="nn">itertools</span></pre></div>
+      <div class="highlight"><pre><span class="kn">import</span> <span class="nn">itertools</span><span class="o">,</span><span class="nn">sys</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -140,7 +140,8 @@ values in <code>d</code> can be lists or a single items</p>
       <p>Run over the combinations.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">combos</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre>  <span class="k">for</span> <span class="n">settings</span> <span class="ow">in</span> <span class="n">combos</span><span class="p">:</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">}</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -152,7 +153,7 @@ values in <code>d</code> can be lists or a single items</p>
       <p>Cache the old settings.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="n">b4</span> <span class="o">=</span> <span class="p">[(</span><span class="n">k</span><span class="p">,</span><span class="nb">getattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">]</span></pre></div>
+      <div class="highlight"><pre>    <span class="n">saved</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="nb">getattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">now</span><span class="p">}</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -164,8 +165,8 @@ values in <code>d</code> can be lists or a single items</p>
       <p>Impose the temp settings.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">settings</span><span class="p">:</span>
-      <span class="nb">setattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">now</span><span class="p">:</span>
+      <span class="nb">setattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">now</span><span class="p">[</span><span class="n">k</span><span class="p">])</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -177,7 +178,7 @@ values in <code>d</code> can be lists or a single items</p>
       <p>Let something do something with the temp settings.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">yield</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">yield</span> <span class="n">now</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -189,8 +190,8 @@ values in <code>d</code> can be lists or a single items</p>
       <p>Reset to old.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">b4</span><span class="p">:</span>
-      <span class="nb">setattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">saved</span><span class="p">:</span>
+      <span class="nb">setattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">saved</span><span class="p">[</span><span class="n">k</span><span class="p">])</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -198,6 +199,33 @@ values in <code>d</code> can be lists or a single items</p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">rx1</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+  <span class="n">d</span>   <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span><span class="n">val</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+  <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">while</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+      <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">key</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">if</span>   <span class="n">v</span><span class="o">==</span><span class="bp">True</span>       <span class="p">:</span> <span class="n">v</span><span class="o">=</span><span class="s">&quot;1&quot;</span>
+    <span class="k">elif</span> <span class="n">v</span><span class="o">==</span><span class="bp">False</span>      <span class="p">:</span> <span class="n">v</span><span class="o">=</span><span class="s">&quot;0&quot;</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">==</span><span class="nb">float</span><span class="p">:</span> <span class="n">v</span><span class="o">=</span> <span class="s">&quot;</span><span class="si">%g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">v</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">==</span><span class="nb">int</span>  <span class="p">:</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span>
+    <span class="k">elif</span> <span class="n">v</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;function&#39;</span><span class="p">:</span> <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="o">.</span><span class="n">__name__</span>
+    <span class="n">tmp</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">v</span><span class="p">)]</span>
+  <span class="k">return</span> <span class="s">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
       </div>
       <hr />
 <p><img align=right 
