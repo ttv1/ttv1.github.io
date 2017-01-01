@@ -86,7 +86,8 @@ of numbers are thrown in at once):</p>
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">class</span> <span class="nc">num</span><span class="p">:</span></pre></div>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">num</span><span class="p">:</span>
+  <span class="n">NORMALIZE</span><span class="o">=</span><span class="bp">True</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -179,12 +180,10 @@ of numbers are thrown in at once):</p>
       <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">dist</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">miss</span><span class="o">=</span><span class="s">&quot;?&quot;</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">miss</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">==</span> <span class="n">miss</span><span class="p">:</span> <span class="k">return</span> <span class="bp">None</span>
     <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">miss</span><span class="p">:</span>
-      <span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span> 
+      <span class="n">x</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">hi</span> <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">hi</span><span class="o">+</span><span class="n">i</span><span class="o">.</span><span class="n">lo</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="k">else</span> <span class="n">i</span><span class="o">.</span><span class="n">lo</span>
     <span class="k">elif</span> <span class="n">y</span> <span class="o">==</span> <span class="n">miss</span><span class="p">:</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-      <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="mi">0</span>
-    <span class="k">else</span><span class="p">:</span>
+      <span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">hi</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">hi</span><span class="o">+</span><span class="n">i</span><span class="o">.</span><span class="n">lo</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="k">else</span> <span class="n">i</span><span class="o">.</span><span class="n">lo</span>
+    <span class="k">elif</span> <span class="n">num</span><span class="o">.</span><span class="n">NORMALIZE</span><span class="p">:</span>
       <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">i</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">y</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span></pre></div>
     </div>
