@@ -90,7 +90,7 @@ the values in the dictionary <code>**d</code>). </p>
 values in <code>d</code> can be lists or a single items</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="kn">import</span> <span class="nn">itertools</span><span class="o">,</span><span class="nn">sys</span></pre></div>
+      <div class="highlight"><pre><span class="kn">import</span> <span class="nn">itertools</span><span class="o">,</span><span class="nn">sys</span><span class="o">,</span><span class="nn">random</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -227,17 +227,122 @@ values in <code>d</code> can be lists or a single items</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-10'>#</a>
       </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="o">*</span><span class="n">lst</span><span class="p">):</span>
+  <span class="k">print</span><span class="p">(</span><span class="o">*</span><span class="n">lst</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">watch</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">every</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">klass</span><span class="o">=</span><span class="s">&quot;__all__&quot;</span><span class="p">,</span><span class="n">repeats</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+  <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+  <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeats</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">one</span> <span class="ow">in</span> <span class="n">src</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+      <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="n">every</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">say</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+      <span class="k">yield</span> <span class="n">one</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">dominates</span><span class="p">(</span><span class="n">pop</span><span class="p">,</span><span class="n">objs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span><span class="n">betters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+  <span class="n">betters</span> <span class="o">=</span> <span class="n">betters</span> <span class="ow">or</span> <span class="p">[</span><span class="nb">min</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pop</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+  <span class="k">if</span> <span class="n">objs</span><span class="o">==</span><span class="bp">None</span><span class="p">:</span>
+    <span class="n">objs</span><span class="o">=</span> <span class="k">lambda</span> <span class="n">z</span><span class="p">:</span> <span class="n">z</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+  <span class="n">doms</span><span class="o">=</span><span class="p">{}</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">one</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span> <span class="n">pop</span><span class="p">):</span>
+    <span class="n">doms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">xs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pop</span><span class="p">):</span>
+      <span class="k">for</span> <span class="n">j</span><span class="p">,</span><span class="n">ys</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pop</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cdom1</span><span class="p">(</span><span class="n">objs</span><span class="p">(</span><span class="n">xs</span><span class="p">),</span><span class="n">objs</span><span class="p">(</span><span class="n">ys</span><span class="p">),</span><span class="n">betters</span><span class="p">):</span>
+          <span class="n">doms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+  <span class="k">return</span> <span class="nb">sorted</span><span class="p">([(</span> <span class="n">doms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span><span class="n">xs</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">xs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pop</span><span class="p">)],</span><span class="n">reverse</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">cdom1</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">betters</span><span class="p">):</span>
+  <span class="s">&quot;many objective&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">w</span><span class="p">(</span><span class="n">better</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">better</span> <span class="o">==</span> <span class="nb">min</span> <span class="k">else</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">expLoss</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="mf">2.71828</span><span class="o">**</span><span class="p">(</span> <span class="n">w</span><span class="o">*</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">y1</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span> <span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
       <hr />
 <p><img align=right 
 src="https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png"
 width=170></p>
 <h2>Copyleft</h2>
-<p>Copyright &copy; 2016 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a></p>
-<p>This program is free software. It comes without any warranty, to
-the extent permitted by applicable law. You can redistribute it
-and/or modify it under the terms of the Do What The F*ck You Want
-To Public License, Version 2, as published by Sam Hocevar. See
-<a href="http://www.wtfpl.net">http://www.wtfpl.net</a> for more details.</p>
+<p>Copyright &copy; 2016,2017 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a>, MIT license v2.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
+to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 <p>Share and enjoy.</p>
 
 <hr>

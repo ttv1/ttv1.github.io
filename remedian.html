@@ -91,7 +91,7 @@ Assuming lists of length 64 and use of pypy3:</p>
 <h2>Programmer's Guide</h2>
     </div>
     <div class='code'>
-      <div class="highlight"><pre></pre></div>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">median</span> <span class="kn">import</span> <span class="n">median</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -158,42 +158,28 @@ Assuming lists of length 64 and use of pypy3:</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-5'>#</a>
       </div>
-      <p>Primitive: return the median of a list of numbers. Cache this
-calculation to avoid repeating a needless call to <code>sort</code>.
-Note that <code>__add__</code> zaps that cache if ever a new number is added.</p>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">_medianPrim</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">lst</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">_median</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="c"># _median is the cache of the prior computation</span>
-      <span class="n">n</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
-      <span class="n">p</span>  <span class="o">=</span> <span class="n">q</span>  <span class="o">=</span> <span class="n">n</span><span class="o">//</span><span class="mi">2</span>
-      <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">p</span><span class="p">,</span><span class="n">q</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span>
-      <span class="k">else</span><span class="p">:</span>
-        <span class="n">lst</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
-          <span class="n">q</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span><span class="mi">1</span>
-      <span class="n">i</span><span class="o">.</span><span class="n">_median</span> <span class="o">=</span> <span class="n">lst</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">if</span> <span class="n">p</span><span class="o">==</span><span class="n">q</span> <span class="k">else</span> <span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">+</span><span class="n">lst</span><span class="p">[</span><span class="n">q</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
-    <span class="k">return</span> <span class="n">i</span><span class="o">.</span><span class="n">_median</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-6'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-6'>#</a>
-      </div>
       <hr />
 <p><img align=right 
 src="https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png"
 width=170></p>
 <h2>Copyleft</h2>
-<p>Copyright &copy; 2016 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a></p>
-<p>This program is free software. It comes without any warranty, to
-the extent permitted by applicable law. You can redistribute it
-and/or modify it under the terms of the Do What The F*ck You Want
-To Public License, Version 2, as published by Sam Hocevar. See
-<a href="http://www.wtfpl.net">http://www.wtfpl.net</a> for more details.</p>
+<p>Copyright &copy; 2016,2017 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a>, MIT license v2.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
+to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 <p>Share and enjoy.</p>
 
 <hr>

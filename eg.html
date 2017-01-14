@@ -187,10 +187,10 @@ Called by <code>runall</code>.</p>
       <span class="n">PASS</span><span class="o">=</span><span class="n">FAIL</span><span class="o">=</span><span class="mi">0</span>
       <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="c"># Reset the random seed before starting a demo.</span>
       <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">examples</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+        <span class="k">if</span> <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
           <span class="k">continue</span>
         <span class="k">try</span><span class="p">:</span> <span class="c"># - Run via `try:except:` (so we can contie after crashes)</span>
-          <span class="n">run1</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> 
+          <span class="n">run1</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
           <span class="n">PASS</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># If a function terminates correctly, increment `PASS`.</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
           <span class="n">FAIL</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c"># If a crash, increment `FAIL`.</span>
@@ -218,7 +218,7 @@ Called by <code>runall</code>.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-7'>#</a>
       </div>
-      <p>Print function doco, it it has any. 
+      <p>Print function doco, it it has any.
  It a multi-line string, print the lines left justified.</p>
     </div>
     <div class='code'>
@@ -280,7 +280,7 @@ Called by <code>runall</code>.</p>
       <p>If called as a decorator, add the function to the list of known functions.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">if</span> <span class="n">f</span> <span class="p">:</span> 
+      <div class="highlight"><pre>  <span class="k">if</span> <span class="n">f</span> <span class="p">:</span>
     <span class="k">assert</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">__name__</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">,(</span><span class="s">&quot;repeated test name </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">)</span>
     <span class="n">runs</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">__name__</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">lst</span> <span class="o">+=</span> <span class="p">[</span><span class="n">f</span><span class="p">]</span></pre></div>
@@ -297,7 +297,7 @@ it lists all the known functions, and their
 documentation strings, in the file <code>Xeg.py</code>.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">elif</span> <span class="s">&quot;-?&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="p">:</span> 
+      <div class="highlight"><pre>  <span class="k">elif</span> <span class="s">&quot;-?&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="p">:</span>
       <span class="n">listAvailableExamples</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span></pre></div>
     </div>
   </div>
@@ -311,7 +311,7 @@ documentation strings, in the file <code>Xeg.py</code>.</p>
 it runs just the functions <code>f1,f2,etc</code> from the list of known functions.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">elif</span> <span class="s">&quot;--&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="p">:</span> 
+      <div class="highlight"><pre>  <span class="k">elif</span> <span class="s">&quot;--&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="p">:</span>
         <span class="n">runall</span><span class="p">(</span> <span class="n">some</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="p">)</span></pre></div>
     </div>
   </div>
@@ -324,7 +324,7 @@ it runs just the functions <code>f1,f2,etc</code> from the list of known functio
       <p>Otherwise, it runs everything in the list of known functions.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="k">else</span> <span class="p">:</span> 
+      <div class="highlight"><pre>  <span class="k">else</span> <span class="p">:</span>
       <span class="n">runall</span><span class="p">(</span> <span class="n">lst</span> <span class="p">)</span>
   <span class="k">return</span> <span class="n">f</span> <span class="c"># `eg` might be a decorator. So return function `f`.</span></pre></div>
     </div>
@@ -340,12 +340,23 @@ it runs just the functions <code>f1,f2,etc</code> from the list of known functio
 src="https://raw.githubusercontent.com/timm/timm.github.io/master/timm.png"
 width=170></p>
 <h2>Copyleft</h2>
-<p>Copyright &copy; 2016 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a></p>
-<p>This program is free software. It comes without any warranty, to
-the extent permitted by applicable law. You can redistribute it
-and/or modify it under the terms of the Do What The F*ck You Want
-To Public License, Version 2, as published by Sam Hocevar. See
-<a href="http://www.wtfpl.net">http://www.wtfpl.net</a> for more details.</p>
+<p>Copyright &copy; 2016,2017 Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;">&#116;&#105;&#109;&#64;&#109;&#101;&#110;&#122;&#105;&#101;&#115;&#46;&#117;&#115;</a>, MIT license v2.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
+to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 <p>Share and enjoy.</p>
 
 <hr>

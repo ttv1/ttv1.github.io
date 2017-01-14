@@ -2,17 +2,17 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <title>src.py</title>
+  <title>median.py</title>
   <link rel="stylesheet" href="pycco.css">
 <meta name="thumbnail" content="https://avatars0.githubusercontent.com/u/23156192?v=3&s=200" />
 	<link rel="shortcut icon" href="favicon.png" type="image/png">
 </head>
 <body>
 <div id='container'>
-<a href="https://github.com/ttv1/src/blob/master/src.py"><img style="z-index: 10; position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a> 
+<a href="https://github.com/ttv1/src/blob/master/median.py"><img style="z-index: 10; position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a> 
   <div id="background"></div>
   <div class='section'>
-    <div class='docs'><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;src.py</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is ttv1 code (Timm tools, version 1).</p></div>
+    <div class='docs'><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;median.py</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is ttv1 code (Timm tools, version 1).</p></div>
   </div>
   <div class='clearall'>
   <div class='section' id='section-0'>
@@ -57,37 +57,22 @@ width=120>
 </form></p>
 <p><br clear=all></p>
 <hr />
-<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rules of src</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is ttv1 code (Timm tools, version 1).</p>
-<h2>Optimizations</h2>
-<p>Best to run this with pypy3</p>
-<h2>Using global options</h2>
-<p>Files needing global options start with <code>from choice import *</code>.</p>
-<p>Global options are read into class static variables using, eg.</p>
-<p>```
-class num:
- hedges = our.num.hedges # 0.38
- conf   = our.num.conf   # 0.95</p>
-<p>```</p>
-<p>Thereafter, code needed the options talks to <code>className.var</code> and not
-<code>our.x.y</code>. Why?  Well, if you are sick of my global system, then dump it and
-make all the config static class variables.</p>
-<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Todo</h1><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is ttv1 code (Timm tools, version 1).</p>
-<ul>
-<li>
-<p>slit numeg over into thing</p>
-</li>
-<li>
-<p>redp div knowing abut thing.n()</p>
-</li>
-</ul>
+<p>Return the median of a list of numbers.
+By default, assumes the list  is unordered
+and needs sorting (and this default can be over-loaded
+at the command line).</p>
+<p>Whether or not to sort by default <em>sounds</em> like a big
+issue. However,  after several timing studies, I can report
+that unless lists are large (10,000 items or more),
+in absolute terms, it makes
+very little difference to the runtimes (since
+Python's built in sort functions can sort thousands
+of numbers in ten-thousands of a second).</p>
+<hr />
+<h2>Programmer's Guide</h2>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">GLOBALS</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">GLOBALS</span>
-<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">takewhile</span><span class="p">,</span> <span class="n">count</span></pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -96,12 +81,20 @@ make all the config static class variables.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-1'>#</a>
       </div>
-      
+      <p>If <code>ordered</code> is <code>False</code>, do not sort <code>lst</code></p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">tsort</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
-    <span class="n">levels_by_name</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">names_by_level</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">set</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span><span class="n">ordered</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+  <span class="k">assert</span> <span class="n">lst</span><span class="p">,</span><span class="s">&quot;median needs a non-empty list&quot;</span>
+  <span class="n">n</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+  <span class="n">p</span>  <span class="o">=</span> <span class="n">q</span>  <span class="o">=</span> <span class="n">n</span><span class="o">//</span><span class="mi">2</span>
+  <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">p</span><span class="p">,</span><span class="n">q</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">lst</span> <span class="o">=</span> <span class="n">lst</span> <span class="k">if</span> <span class="n">ordered</span> <span class="k">else</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span> <span class="c"># for even-length lists, use mean of mid 2 nums</span>
+      <span class="n">q</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span><span class="mi">1</span>
+  <span class="k">return</span> <span class="n">lst</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">if</span> <span class="n">p</span><span class="o">==</span><span class="n">q</span> <span class="k">else</span> <span class="p">(</span><span class="n">lst</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">+</span><span class="n">lst</span><span class="p">[</span><span class="n">q</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -144,8 +137,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 /*
  var disqus_config = function () {
-this.page.url = 'https://ttv1.github.ip/src.html'
-this.page.identifier = 'src';
+this.page.url = 'https://ttv1.github.ip/median.html'
+this.page.identifier = 'median';
  };
  */
 (function() { // DON'T EDIT BELOW THIS LINE
